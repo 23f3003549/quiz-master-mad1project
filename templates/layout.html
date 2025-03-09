@@ -20,6 +20,21 @@
     {% endblock %}
 </head>
 <body>
+    {% include 'navbar.html'   %}
+<!-- ---------------------------------------------------------------------flashed message------------------------------------------------------ -->
+{% with messages=get_flashed_messages() %}
+{% if messages %}
+  <ul class=flashes style="padding: 0%;">
+  {% for message in messages %}
+  <div class= "alert alert-primary" role="alert" >
+    {{ message }}
+  </div>
+  {% endfor %}
+  </ul>
+{% endif %}
+{% endwith %}
+<!-- ------------------------------------------------------------------------flashed message end -->
+
     <div class="container">
     {% block content %}
         

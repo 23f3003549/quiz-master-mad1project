@@ -3,11 +3,16 @@ from app import app
 from datetime import datetime
 from models import db, User,Subject,Quiz,Question,Chapter
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
 from config import ADMIN_USERNAME, ADMIN_PASSWORD
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    if 'user_id' in session:
+      return render_template('index.html')
+    else:
+        flash("please login to continue")
+        return redirect(url_for('login'))
 # --------------------------------------------------------------------login----------------------------------------------------------------------
 @app.route('/login')
 def login():
@@ -35,8 +40,9 @@ def login_post():
         return redirect(url_for('login'))
     
     
-    
-    return " User Successfully login"
+    session['user_id']=user.id
+    flash(" User Successfully login")  
+    return redirect ('/')
 
 # ----------------------------------------------------------------login end-------------------------------------------------------------------------
 
@@ -73,4 +79,53 @@ def register_post():
     db.session.commit()
     return redirect(url_for('login'))
 # ------------------------------------------------------------------register end-------------------------------------------------------------------------
+# ------------------------------------------------------------------auth----------------------------------------------------------------------------------
+def auth_require(func):
+    @wraps(func)
+    def inner(*args, **kwargs):
+        if 'user_id' in session:
+            return func(*args, **kwargs)
+        else:
+            flash("please login to continue")
+            return redirect(url_for('login'))
+    return inner
 
+# ------------------------------------------------------------------profile---------------------------------------------------------------------------
+
+@app.route('/profile')
+@auth_require
+def profile():
+    user=User.query.get(session['user_id'])
+    return render_template('profile.html', user=user)
+
+@app.route('/profile', methods=['POST'])
+@auth_require
+def profile_post():
+    username = request.form.get('username')
+    cpassword = request.form.get('cpassword')
+    password = request.form.get('password')
+    newname = request.form.get('fullname')
+
+    if not username or not cpassword or not password:
+      flash("please fill the required fields")
+      return redirect(url_for('profile'))
+    
+    user = User.query.get(session['user_id'])
+    if not check_password_hash(user.passhash, cpassword):
+        flash("Incorrect password")
+        return redirect(url_for('profile'))
+    
+    new_password=generate_password_hash(password)
+    user.passhash=new_password
+    user.fullName=newname
+    db.session.commit()
+    flash("Updated successfully ")
+    return redirect(url_for('profile'))
+
+
+# -------------------------------------------------------------------logout-----------------------------------------------------------------------------------
+@app.route('/logout')
+@auth_require
+def logout():
+    session.pop('user_id')
+    return redirect(url_for('login'))

@@ -28,7 +28,7 @@ def login_post():
         return redirect(url_for('login'))
     
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        return "welcome admin"
+        return redirect(url_for('admin'))
 
     user=User.query.filter_by(username=username).first()  
 
@@ -129,3 +129,13 @@ def profile_post():
 def logout():
     session.pop('user_id')
     return redirect(url_for('login'))
+
+# ----------------------------------------------------------------Admin Dashboard-----------------------------------------------------------------------
+@app.route('/admin')
+# @auth_require
+def admin():
+    return render_template('admin.html')
+
+@app.route('/subject/add')
+def add_sub():
+    return "add subject"

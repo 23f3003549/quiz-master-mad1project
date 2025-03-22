@@ -1,2 +1,1 @@
-
-#     time_duration= db.Column(db.Integer, nullable=False)
+from flask_migrate import Migrate

@@ -1,11 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from app import app
+from flask_migrate import Migrate
 
 # app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///db.sqlite3'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
 db=SQLAlchemy(app)
+migrate= Migrate(app, db)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -41,7 +43,8 @@ class Quiz(db.Model):
 
 class Question(db.Model):
     id =db.Column(db.Integer, primary_key=True, autoincrement=True)
-    quiz_id=db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False)  
+    quiz_id=db.Column(db.Integer, db.ForeignKey('quiz.id'), nullable=False) 
+    question_title=db.Column(db.String(200), nullable=False) 
     question_text=db.Column(db.String(200), nullable=False)
     option1=db.Column(db.String(100), nullable=False)
     option2=db.Column(db.String(100), nullable=False) 

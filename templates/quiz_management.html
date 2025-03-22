@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz_management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="/admin">HOME</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('quizz') }}">Quiz <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Summary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#">Profile</a>
+            </li>
+            <li class="nav_item">
+                <a href="/login" class="btn btn-danger">Logout</a>
+            </li>
+          </ul>
+          <form class="form-inline my-2 my-lg-0" style="display: flex; margin-left:50%;">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
+          </form>
+          <div>
+            <h3 style="padding-left: 10%; text-align:center">Welcome admin</h3>
+          </div>
+        </div>
+      </nav>
+      <!-- --------------------------------------------------navbar end------------------------------------------------------- -->
+       <h1 style="text-align: center;">Quiz Management</h1>
+       <br>
+       <br>
+       {% if quizzes %}
+       {% for quiz in quizzes %}
+       <div>
+        <h2 >
+          {% set chapter = chapters|selectattr('id', 'equalto', quiz.chapter_id)|list|first %}
+          <a href="{{ url_for('quizz', quiz_id=quiz.id) }}" style="text-decoration: none; color:black;">QUIZ{{ quiz.id }}({{ chapter.name }})</a>
+        </h2>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Question_title</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for question in quiz.questions %}
+            <tr>
+              <td>{{ question.id }}</td>
+              <td>{{ question.question_text }}</td>
+              <td>
+                <a href="/question/edit/<{{ quiestion.id }}>" class="btn btn-warning">Edit</a>
+                <a href="/question/delete/<{{ question.id }}>" class="btn btn-danger">Delete</a>
+              </td>
+             
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href="" class="btn btn-success">
+          <i class="fas fa-add"></i>
+          Question
+        </a>
+
+       </div>
+       {% endfor %}
+       {% else %}
+       <h3> No Quiz found.Add quiz to start <h3>
+       {% endif %}
+       <div style="text-align: center;">
+        <a href="{{ url_for('new_quiz') }}" class="btn btn-success">
+          <i class="fas fa-add"></i>
+          New_quiz
+        </a>
+       </div>
+
+ 
+    
+    <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>  
+</body>
+</html>

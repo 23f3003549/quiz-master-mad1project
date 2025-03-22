@@ -33,7 +33,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Quiz<span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{{ url_for('quizz') }}">Quiz<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Summary</a>
@@ -47,7 +47,7 @@
       </ul>
       <form class="form-inline my-2 my-lg-0" style="display:flex; margin-left:50%;">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
       </form>
       <div>
         <h3 style="padding-left: 10%; text-align:center;">Welcome Admin</h3>
@@ -55,48 +55,64 @@
       
     </div>
   </nav>
-
+{% if not subjects %}
+<h3>No subjects added yet</h3>
+{% else %}
 {% for subject in subjects %}
-<div class="subs">
-    <h2>{{subject.name}}</h2>
-    <table class="chapter_table">
-        <thead>
+  <div class="subs">
+    <h2>{{ subject.name }}</h2>
+    <p>{{ subject.description }}</p>
+    <table class="table">
+        <thead class="thead-dark">
         <tr>
             <th>Chapter Name</th>
             <th>No of Questions</th>
             <th>Actions</th>
         </tr>
         </thead>
+        
         <tbody>
+          {% if subject.id in sub_chapters %}
             {% for chapter in sub_chapters[subject.id] %}
              <tr>
                <td>{{chapter.name}}</td>
                 <td>
-                    {% if chapter.quizs|lenth >0 and chapter.quizs[0].no_of_questions %}
-                    {{chapter.quizs[0].no_of_questions}}
-                    {% else %}
-                    N/A
-                    {% endif %}
+                  {{ question_counts[chapter.id] }}
+<!--                    
+                    {% set total_questions = 0 %}
+                    {% for quiz in chapter.quizzes %}
+                    {% set total_questions = total_questions + quiz.no_of_questions %}
+                    {% endfor %}
+
+                    {{ total_questions }} -->
                 </td>
                 <td>
-                    <a href="/chapter/edit/{{chapter.id}}" class="btn btn-success">Edit</a>
-                    <a href="/chapter/delete/{{chapter.id}}" class="btn btn-success">delete</a>
+                    <a href="/chapter/edit/{{chapter.id}}" class="btn btn-warning">Edit</a>
+                    <a href="/chapter/delete/{{chapter.id}}" class="btn btn-danger">delete</a>
                 </td>
 
              </tr>   
             {% endfor %}
+          {% endif %}  
         </tbody>
     </table>
-</div>
-{% endfor %}
-
-<div style="text-align: center;">
-    <a href="/subject/add" class="btn btn-success">
+    <div>
+      <a href={{ url_for('add_chapter', subject_id=subject.id) }} class="btn btn-success">
         <i class="fas fa-add"></i>
-        Add Chapters
+        chapter
+      </a>
+    </div>
+  </div>
+{% endfor %}
+{% endif %}
+<div style="text-align: center;">
+    <a href="{{ url_for('add_sub') }}" class="btn btn-success">
+        <i class="fas fa-add"></i>
+        Add Subject
     </a>
 </div>
-    
+ 
+
            
 
 

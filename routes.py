@@ -102,6 +102,7 @@ def profile():
 
 @app.route('/profile', methods=['POST'])
 @auth_require
+
 def profile_post():
     username = request.form.get('username')
     cpassword = request.form.get('cpassword')
@@ -127,7 +128,7 @@ def profile_post():
 
 # -------------------------------------------------------------------logout-----------------------------------------------------------------------------------
 @app.route('/logout')
-@auth_require
+
 def logout():
     session.pop('user_id')
     return redirect(url_for('login'))
@@ -138,16 +139,20 @@ def logout():
 def admin():
     subjects = Subject.query.all()
     sub_chapters = {}
+    chapter_quizs={}
     chapter_question ={}
     for subject in subjects:
         chapters = Chapter.query.filter_by(subject_id=subject.id).all()
         sub_chapters[subject.id]=chapters
 
         for chapter in chapters:
-            total_question = sum(quiz.no_of_questions for quiz in chapter.quizs)
+            quizzes = Quiz.query.filter_by(chapter_id= chapter.id).all()
+            chapter_quizs[ chapter.id ] = quizzes
+            total_question = sum(quiz.no_of_questions for quiz in quizzes)
             chapter_question[chapter.id] = total_question
+    quiz = Quiz.query.first()       
     
-    return render_template('admin.html',subjects=subjects,sub_chapters=sub_chapters, question_counts= chapter_question)
+    return render_template('admin.html',subjects=subjects,sub_chapters=sub_chapters, chapter_quizs= chapter_quizs, question_counts = chapter_question)
 
 # ---------------------------------------------------adding subjects-------------------------------------------------------------------
 @app.route('/subject/add',methods=['GET','POST'])
@@ -162,7 +167,22 @@ def add_sub():
         return redirect(url_for('admin'))
     else:
         return render_template('add_sub.html')   
- 
+#  ------------------------------------------------------------delete subject----------------------------------------------------------------------------
+@app.route('/subject/delete/<int:subject_id>', methods=['GET','POST'])
+def del_sub(subject_id):
+    subject= Subject.query.get(subject_id)
+    if subject:
+        chapters =Chapter.query.filter_by(subject_id = subject_id).all()
+        for chapter in chapters:
+            Quiz.query.filter_by(chapter_id=chapter_id).delete()
+            db.session.delete(chapter)
+        db.session.delete(subject) 
+        db.session.commit()
+        return redirect(url_for('admin'))  
+    else:
+        return "Subject not found", 404
+
+
 # ------------------------------------------adding chapter-----------------------------------------------------------------------------
 @app.route('/chapter/add/<int:subject_id>', methods=['GET','POST']) 
 def add_chapter(subject_id):
@@ -199,12 +219,15 @@ def edit_chap(chapter_id):
 def del_chap(chapter_id):
     chapter=Chapter.query.get(chapter_id)
     if chapter:
-        quiz=Quiz.query.filter_by(chapter_id = chapter_id).first()
-        if quiz:
-            db.session.delete(quiz)
+        quiz=Quiz.query.filter_by(chapter_id = chapter_id).delete()
+        # if quiz:
+        #     db.session.delete(quiz)
         db.session.delete(chapter)
         db.session.commit()  
-    return redirect(url_for('admin'))   
+        return redirect(url_for('admin'))  
+    else:
+        return "chapter not found",404
+ 
 
 # -------------------------------------------------------QUIZ PAGE--------------------------------------------------------------------------------------------
 @app.route('/quizz',methods=['GET','POST'])
@@ -228,26 +251,47 @@ def new_quiz():
         else:
             date_of_quiz=datetime.date.formisoformat(date_of_quiz1)    
         time_duration = request.form.get('time_duration')
-        no_of_questions = request.form.get('no_of_questions')
+        # no_of_questions = request.form.get('no_of_questions')
         notes = request.form.get('notes')
 
-        new_quiz =Quiz(chapter_id=chapter_id, date_of_quiz=date_of_quiz, time_duration=time_duration, no_of_questions=no_of_questions, notes=notes)
+        new_quiz =Quiz(chapter_id=chapter_id, date_of_quiz=date_of_quiz, time_duration=time_duration, no_of_questions=0, notes=notes)
         db.session.add(new_quiz)
+        db.session.commit()
+        question_count =Question.query.filter_by(quiz_id = new_quiz.id).count()
+        new_quiz.no_of_questions= question_count
         db.session.commit()
         return redirect(url_for('quizz'))
     else:
        chapters =Chapter.query.all()
        return render_template('new_quiz.html',chapters=chapters)
    
+# --------------------------------------------------------------------------delete quiz-------------------------------------------------------------------------------------
+
+@app.route('/quiz/delete/<int:quiz_id>', methods=['GET','POST'])
+def del_quiz(quiz_id):
+    quiz =Quiz.query.get(quiz_id)
+    if quiz:
+        Question.query.filter_by(quiz_id= quiz_id).delete()
+        db.session.delete(quiz)
+        db.session.commit()
+        return redirect(url_for('quizz'))
+    else:
+        return "Quiz not found", 404
+
 
 # ------------------------------------------------------------------Add Questions-------------------------------------------------------------   
-@app.route('/question/add<int:quiz_id>', methods=['GET','POST'])
+@app.route('/question/add/<int:quiz_id>', methods=['GET','POST'])
 def add_questions(quiz_id):
         quiz =Quiz.query.get(quiz_id)
         if not quiz:
             return "Quiz not found", 404
         
-        if request.method == ['POST']:
+        # session['question_count'] == Question.query.filter_by(quiz_id = quiz_id).count()
+        # if 'question_count' not in session or session['question_count'] >= quiz.no_of_questions:
+        #     session['question_count'] = 0
+            # session[ 'question_count' ] = Question.query.filter_by(quiz_id = quiz_id).count()
+
+        if request.method == 'POST':
             question_text= request.form.get('question_text')
             question_title=  request.form.get('question_title')
             option1= request.form.get('option1')
@@ -263,12 +307,39 @@ def add_questions(quiz_id):
                                       option3=option3,
                                       option4=option4,
                                       correct_option=correct_option)
+            
             db.session.add(new_question)
             db.session.commit()
-            return redirect(url_for('quizz'))
-        return render_template('add_question.html',quiz=quiz)
+            quiz.no_of_questions +=1
+            db.session.commit()
+            session[ 'question_count' ] += 1
+            # if session[ 'question_count' ] < quiz.no_of_questions:
+            #     # session.pop('question_count', None)
+            #     print('redirect to next page')
+            #     return redirect(url_for('add_questions', quiz_id=quiz_id))
+            # else:
+            #     session.pop('question_count', None)
+            #     return redirect(url_for('quizz'))       
+        return render_template('add_question.html',quiz=quiz) # question_count=session[ 'question_count' ]+1
+# --------------------------------------------------------------------------delete question--------------------------------------------------------------------------------
+@app.route('/question/delete/<int:question_id>',methods=['GET','POST'])
+def del_question(question_id):
+    question= Question.query.get(question_id)
+    if question :
+      quiz_id = question.quiz_id
+      quiz = Quiz.query.get(quiz_id)
+
+      db.session.delete(question)
+      db.session.commit()
+
+      if quiz.no_of_questions > 0:
+          quiz.no_of_questions -= 1
+          db.session.commit()
+      
+      return redirect(url_for('quizz'))
 
 
+# -------------------------------------------------------------------------
         
 
 

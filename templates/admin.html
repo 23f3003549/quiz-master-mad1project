@@ -39,7 +39,7 @@
           <a class="nav-link" href="#">Summary</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Profile</a>
+          <a class="nav-link" href="#">Profile</a>
         </li>
         <li class="nav-item">
             <a class="btn btn-danger" href="/login">logout</a>
@@ -77,14 +77,12 @@
              <tr>
                <td>{{chapter.name}}</td>
                 <td>
-                  {{ question_counts[chapter.id] }}
-<!--                    
-                    {% set total_questions = 0 %}
-                    {% for quiz in chapter.quizzes %}
-                    {% set total_questions = total_questions + quiz.no_of_questions %}
-                    {% endfor %}
-
-                    {{ total_questions }} -->
+                  {{ question_counts[ chapter.id ] }}
+                  <!-- {% set total_questions = 0 %}
+                  {% for quiz in chapter.quizs %}
+                  {% set total_questions = total_questions + quiz.no_of_questions %}
+                  {% endfor %}
+                  {{ total_questions }} -->
                 </td>
                 <td>
                     <a href="/chapter/edit/{{chapter.id}}" class="btn btn-warning">Edit</a>
@@ -101,6 +99,12 @@
         <i class="fas fa-add"></i>
         chapter
       </a>
+    
+      <a href="/subject/delete/{{subject.id}}" class="btn btn-danger">
+      <i class="fa-solid fa-trash"></i>
+      Subject
+      </a>
+      
     </div>
   </div>
 {% endfor %}

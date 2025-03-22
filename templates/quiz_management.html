@@ -21,13 +21,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="{{ url_for('quizz') }}">Quiz <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#">Quiz <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Summary</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link disabled" href="#">Profile</a>
+              <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
             </li>
             <li class="nav_item">
                 <a href="/login" class="btn btn-danger">Logout</a>
@@ -49,7 +49,8 @@
        <br>
        {% if quizzes %}
        {% for quiz in quizzes %}
-       <div>
+       <div style="display:inline-block; width:50%; border:1px solid black;">
+
         <h2 >
           {% set chapter = chapters|selectattr('id', 'equalto', quiz.chapter_id)|list|first %}
           <a href="{{ url_for('quizz', quiz_id=quiz.id) }}" style="text-decoration: none; color:black;">QUIZ{{ quiz.id }}({{ chapter.name }})</a>
@@ -66,22 +67,35 @@
             {% for question in quiz.questions %}
             <tr>
               <td>{{ question.id }}</td>
-              <td>{{ question.question_text }}</td>
+              <td>{{ question.question_title }}</td>
               <td>
-                <a href="/question/edit/<{{ quiestion.id }}>" class="btn btn-warning">Edit</a>
-                <a href="/question/delete/<{{ question.id }}>" class="btn btn-danger">Delete</a>
+                <a href="/question/edit/{{ question.id }}" class="btn btn-warning">Edit</a>
+                <a href="/question/delete/{{ question.id }}" class="btn btn-danger">Delete</a>
               </td>
-             
             </tr>
             {% endfor %}
           </tbody>
         </table>
-        <a href="" class="btn btn-success">
+        
+        
+        <a href="/question/add/{{ quiz.id }}" class="btn btn-success">
           <i class="fas fa-add"></i>
           Question
         </a>
+        <a href="/quiz/delete/{{ quiz.id }}" class="btn btn-danger">
+          <i class=" fa-solid fa-trash"></i>
+          quiz
+          
+
+        </a>
+        
+
 
        </div>
+       <br>
+       <br>
+       
+       
        {% endfor %}
        {% else %}
        <h3> No Quiz found.Add quiz to start <h3>
@@ -92,6 +106,7 @@
           New_quiz
         </a>
        </div>
+       
 
  
     

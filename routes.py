@@ -44,7 +44,7 @@ def login_post():
     
     session['user_id']=user.id
     flash(" User Successfully login")  
-    return redirect ('/')
+    return redirect('user_dashboard')
 
 # ----------------------------------------------------------------login end-------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ def auth_require(func):
 @auth_require
 def profile():
     user=User.query.get(session['user_id'])
-    return render_template('profile.html', user=user)
+    return render_template('user_profile.html', user=user)
 
 @app.route('/profile', methods=['POST'])
 @auth_require
@@ -123,7 +123,7 @@ def profile_post():
     user.fullName=newname
     db.session.commit()
     flash("Updated successfully ")
-    return redirect(url_for('profile'))
+    return redirect(url_for('user_dashboard'))
 
 
 # -------------------------------------------------------------------logout-----------------------------------------------------------------------------------
@@ -339,7 +339,10 @@ def del_question(question_id):
       return redirect(url_for('quizz'))
 
 
-# -------------------------------------------------------------------------
+# --------------------------------------------------------------------------------user dashboard----------------------------------------------------------------------------------------
+@app.route('/user_dashboard', methods=['GET','POST'])
+def user_dashboard():
+    return render_template('user_dashboard.html')
         
 
 

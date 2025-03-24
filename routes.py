@@ -1,11 +1,16 @@
 from flask import render_template,request,url_for,flash,redirect,session
 from app import app
+from extension import db
 from datetime import datetime
 import datetime
-from models import db, User,Subject,Quiz,Question,Chapter
+from models import db, User,Subject,Quiz,Question,Chapter,Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from config import ADMIN_USERNAME, ADMIN_PASSWORD
+from config import Config
+from sqlalchemy.orm import joinedload
+
+ADMIN_USERNAME = Config.ADMIN_USERNAME
+ADMIN_PASSWORD = Config.ADMIN_PASSWORD
 
 @app.route('/')
 def index():
@@ -174,7 +179,7 @@ def del_sub(subject_id):
     if subject:
         chapters =Chapter.query.filter_by(subject_id = subject_id).all()
         for chapter in chapters:
-            Quiz.query.filter_by(chapter_id=chapter_id).delete()
+            Quiz.query.filter_by(chapter_id=chapter.id).delete()
             db.session.delete(chapter)
         db.session.delete(subject) 
         db.session.commit()
@@ -264,6 +269,32 @@ def new_quiz():
     else:
        chapters =Chapter.query.all()
        return render_template('new_quiz.html',chapters=chapters)
+    
+# ---------------------------------------------------------------------------------update quiz-------------------------------------------------------------------------------
+@app.route('/quiz/update/<int:quiz_id>', methods=['GET','POST'])
+def edit_quiz(quiz_id):
+    quiz= Quiz.query.get_or_404(quiz_id)
+    if request.method == 'POST':
+        quiz.chapter_id = request.form.get('chapter_id')
+        date_of_quiz = datetime.date(request.form.get('date_of_quiz'))
+        if not date_of_quiz:
+            quiz.date_of_quiz= datetime.date.today()
+        else:
+            quiz.date_of_quiz = datetime.date.isoformat(date_of_quiz)    
+
+        quiz.time_duration = request.form.get('time_duration')    
+        quiz.notes = request.form.get('notes')
+
+        db.session.commmit()
+        return redirect( url_for('quizz') )
+    else:
+        chapters=Chapter.query.all()
+        return render_template('edit_quiz.html', quiz=quiz, chapters=chapters)
+
+    
+
+
+        
    
 # --------------------------------------------------------------------------delete quiz-------------------------------------------------------------------------------------
 
@@ -312,7 +343,7 @@ def add_questions(quiz_id):
             db.session.commit()
             quiz.no_of_questions +=1
             db.session.commit()
-            session[ 'question_count' ] += 1
+            # session[ 'question_count' ] += 1
             # if session[ 'question_count' ] < quiz.no_of_questions:
             #     # session.pop('question_count', None)
             #     print('redirect to next page')
@@ -337,14 +368,41 @@ def del_question(question_id):
           db.session.commit()
       
       return redirect(url_for('quizz'))
+# ----------------------------------------------------------------------------------edit questions------------------------------------------------------------------------
+@app.route('/question/edit/<int:question_id>', methods=['GET', 'POST'])
+def edit_question(question_id):
+    question= Question.query.get_or_404(question_id)
+    print(question.__dict__)
+    if request.method == 'POST':
+        question.question_title = request.form.get('question_title')
+        question.question_text = request.form.get('question_text')
+        question.option1 = request.form.get('option1')
+        question.option2 = request.form.get('option2')
+        question.option3 = request.form.get('option3')
+        question.option4 = request.form.get('option4')
+        question.correct_option = int(request.form.get('correct_option'))
+        db.session.commit()
+        flash('Question updated successfully')
+        return redirect(url_for('quizz'))
+    return render_template('edit_question.html', question=question)
+
 
 
 # --------------------------------------------------------------------------------user dashboard----------------------------------------------------------------------------------------
 @app.route('/user_dashboard', methods=['GET','POST'])
 def user_dashboard():
-    return render_template('user_dashboard.html')
+    quizzes= Quiz.query.all()
+    quiz_data = []
+    for quiz in quizzes:
+        chapter= Chapter.query.get(quiz.chapter_id)
+        question_count = Question.query.filter_by(quiz_id=quiz.id).count()
+        quiz_data.append((quiz,chapter, question_count))
+    return render_template('user_dashboard.html', quizzes=quiz_data)
         
-
+# @app.route('/quiz/display', methods=['GET','POST'])
+# def quiz_display():
+#     quizzes=Quiz.query.all()
+#     return render_template('user_dashboard.html',quizzes=quizzes)
 
 
 

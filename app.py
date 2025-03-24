@@ -1,19 +1,20 @@
 from flask import Flask ,render_template,request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from config import Config
+from extension import db, migrate
 
 app = Flask(__name__)
 
+app.config.from_object(Config)
+# db = SQLAlchemy(app)
+db.init_app(app)
+migrate.init_app(app, db)
 
-# app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///db.sqlite3'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-
-import config
-import models
-import routes
+from models import *
+from routes import *
 
 
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all
     app.run(debug=True)

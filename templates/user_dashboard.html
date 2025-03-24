@@ -11,6 +11,7 @@
     <title>User Dashboard</title>
 </head>
 <body>
+    <!-- ---------------------------------------------------------------------navbar-------------------------------------------------------------------------------------- -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/user_dashboard">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,6 +43,47 @@
         </div>
       </nav>
     <h1>Welcome to user dashboard</h1>
+
+    <!-- -----------------------------------------------------------------------------Quiz Display-------------------------------------------------------------------------------------- -->
+{% if not quizzes %}
+<h2 style="text-align: center;">No Upcoming quizzes</h2>
+{% else %}
+    <div>
+    
+    <h2 style="text-align:center">Upcoming quizzes</h2>
+    <table class="table"> 
+        <thead class="thead-dark">
+            <tr>
+                <th>Id</th>
+                <th>Chapter</th>
+                <th>No of questions</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for quiz,chapter, question_count in quizzes %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ chapter.name }}</td>
+                <td>{{ question_count }}</td>
+                <td>{{ quiz.date_of_quiz.strftime('%Y-%m-%d') }}</td>
+                <td>{{ quiz.time_duration }} minutes</td>
+                <td>
+                    <a href="#" class="btn btn-primary">View</a>
+                    <a href="#" class="btn btn-success">Attempt</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+   
+</div>
+{% endif %}
+
 
 
     <!-- Bootstrap Bundle with Popper -->

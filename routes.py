@@ -435,7 +435,7 @@ def user_dashboard():
 #     quizzes=Quiz.query.all()
 #     return render_template('user_dashboard.html',quizzes=quizzes)
 
-
+# -------------------------------------------------------dispaly and attempt quiz --------------------------------------------------------------------------------------
 @app.route('/user/quiz_attempt/<int:quiz_id>/<int:question_num>', methods=['GET','POST'])
 def quiz_attempt(quiz_id, question_num):
      user_id = session.get('user_id',1)
@@ -505,7 +505,7 @@ def quiz_attempt(quiz_id, question_num):
      
      return render_template("show_quiz.html", quiz=quiz, question=question, question_num = question_num, total=len(questions))
 
-
+# ----------------------------------------------------------------------------quiz submission summary-------------------------------------------------------------------
 
 @app.route('/submit_quiz/<int:quiz_id>')
 def submit_quiz(quiz_id):
@@ -526,7 +526,7 @@ def submit_quiz(quiz_id):
     time_taken1 = str(score_details.time_taken)
     return render_template('scores.html', quiz= quiz, total_score= score_details.total_scored,time_taken=time_taken1)
 
-
+# ---------------------------------------------------------------------------------scores---------------------------------------------------------------------------
 @app.route('/user_scores')  
 def user_scores ():
     user_id= session.get('user_id')
@@ -541,4 +541,31 @@ def user_scores ():
         quiz_scores.append((quiz.id,no_of_questions, score.date_of_attempt, score.total_scored))
     return render_template('user_scores.html', quiz_scores=quiz_scores)    
 
-        
+
+ # ----------------------------------------------------------------------------------user summary---------------------------------------------------------------------------
+@app.route('/user/summary')
+def user_summary():
+    user_id = session.get('user_id')
+    if not user_id:
+        return "User not loggerd in", 403
+    subjects= Subject.query.all()
+    sub_names=[]
+    quiz_counts =[]
+
+    for subject in subjects:
+        quiz_count = Quiz.query.join(Chapter).filter(Chapter.subject_id == subject.id).count()
+        sub_names.append(subject.name)
+        quiz_counts.append(quiz_count)
+
+    quiz_attempts =Scores.query.with_entities(Scores.date_of_attempt).filter_by(user_id = user_id).all()  
+    monthwise_count = {}
+    for attempt in quiz_attempts:
+        month = attempt.date_of_attempt.strftime('%B')
+        if month in monthwise_count:
+            monthwise_count[month] += 1
+        else:
+            monthwise_count[month] = 1  
+    months = list(monthwise_count.keys())   
+    quizzes= list(monthwise_count.values())       
+
+    return render_template('user_summary.html',sub_names=sub_names, quiz_counts=quiz_counts, months= months,quizzes= quizzes)

@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from config import Config
 from sqlalchemy.orm import joinedload
+from sqlalchemy import func
 
 ADMIN_USERNAME = Config.ADMIN_USERNAME
 ADMIN_PASSWORD = Config.ADMIN_PASSWORD
@@ -538,7 +539,9 @@ def user_scores ():
     for score in scores:
         quiz = Quiz.query.get(score.quiz_id)
         no_of_questions = Question.query.filter_by(quiz_id=quiz.id).count()
-        quiz_scores.append((quiz.id,no_of_questions, score.date_of_attempt, score.total_scored))
+        
+        quiz_scores.append((quiz.id,no_of_questions, score.date_of_attempt, score.time_taken, score.total_scored))
+        
     return render_template('user_scores.html', quiz_scores=quiz_scores)    
 
 
@@ -569,3 +572,32 @@ def user_summary():
     quizzes= list(monthwise_count.values())       
 
     return render_template('user_summary.html',sub_names=sub_names, quiz_counts=quiz_counts, months= months,quizzes= quizzes)
+
+# --------------------------------------------------------------------------------------admin summary----------------------------------------------------------------------------------------
+@app.route('/admin/summary')
+def admin_summary():
+    subject_top_scores = (
+        db.session.query(Subject.name, func.max(Scores.total_scored))
+        .join(Chapter, Chapter.subject_id == Subject.id)
+        .join(Quiz, Quiz.chapter_id == Chapter.id)
+        .join(Scores, Scores.quiz_id == Quiz.id)
+        .group_by(Subject.name).all()
+
+    )
+
+    subject_wise_attempt = (
+        db.session.query(Subject.name, func.count(Scores.user_id))
+        .join(Chapter, Chapter.subject_id == Subject.id)
+        .join(Quiz, Quiz.chapter_id == Chapter.id)
+        .join(Scores, Scores.quiz_id == Quiz.id)
+        .group_by(Subject.name).all()
+
+    )
+    subjects = [subject[0] for subject in subject_top_scores ]
+    top_scores = [subject[1] for subject in subject_top_scores]
+
+    subject_attempts = [subject[0] for subject in subject_wise_attempt]
+    total_user_attempt = [subject[1] for subject in subject_wise_attempt]
+
+    return render_template('admin_summary.html',subjects= subjects,top_scores=top_scores,subject_attempts = subject_attempts,total_user_attempt= total_user_attempt)
+   

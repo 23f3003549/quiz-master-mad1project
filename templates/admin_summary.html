@@ -13,7 +13,7 @@
 <body>
        <!-- ---------------------------------------------------------------------navbar-------------------------------------------------------------------------------------- -->
        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/user_dashboard">Home</a>
+        <a class="navbar-brand" href="/admin">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -22,11 +22,11 @@
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               
-              <a class="nav-link" href="{{ url_for('user_scores') }}">Scores</a>
+              <a class="nav-link" href="{{ url_for('quizz') }}">Quiz</a>
               
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('user_summary') }}">Summary</a>
+              <a class="nav-link " href="{{ url_for('admin_summary') }}">Summary</a>
             </li>
             <li class="nav-item">
                 <a href="{{ url_for('profile') }}" class="nav-link">profile</a>
@@ -40,7 +40,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
           </form>
           <div>
-            <h3 style="text-align: center;">Welcome User</h3>
+            <h3 style="text-align: center;">Welcome Admin</h3>
           </div>
         </div>
       </nav>
@@ -50,13 +50,14 @@
       <br>
       <br>
       <div style="position: relative; display:inline-block; margin-left:10%">
-        <h3>Subject-wise no of quizzes</h3>
+        <h3>Subject-wise top score</h3>
+
         <canvas id="myChartBar"></canvas>
       </div>
 
       <div style="position: relative; display:inline-block; margin-left:20%">
-        <h3>Month-wise no of quizzes attempted</h3>
-        <canvas id="myChartPie"></canvas>
+        <h3>Subject-wise user attempt</h3>
+        <canvas id="myChartdonut"></canvas>
       </div>
       
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -67,14 +68,15 @@
         new Chart(barctx, {
           type: 'bar',
           data: {
-            labels: {{ sub_names|safe }},
+            labels: {{ subjects|safe }},
             datasets: [{
-              label: '#no of quizzes',
-              data: {{ quiz_counts|safe }},
+              label: '#Top score',
+              data: {{ top_scores|safe }},
               borderWidth: 1
             }]
           },
           options: {
+            responsive: true,
             scales: {
               y: {
                 beginAtZero: true
@@ -84,18 +86,19 @@
         });
 
 
-        const piectx = document.getElementById('myChartPie');
+        const piectx = document.getElementById('myChartdonut');
         new Chart(piectx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-              labels: {{ months|safe }},
+              labels: {{ subject_attempts|safe }},
               datasets: [{
-                label: '#no of quiz attempted',
-                data: {{ quizzes|safe }},
+                label: '#subject-wise attempt',
+                data: {{ total_user_attempt|safe }},
                 borderWidth: 1
               }]
             },
             options: {
+              responsive:true,
               scales: {
                 y: {
                   beginAtZero: true

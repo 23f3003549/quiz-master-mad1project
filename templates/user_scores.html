@@ -54,15 +54,17 @@
                     <th>Quiz Id</th>
                     <th>No of questions</th>
                     <th>Date</th>
+                    <th>Time Taken</th>
                     <th>Score</th>
                 </tr>
             </thead>
             <tbody>
-                {% for quiz_id,no_of_questions,quiz_date,total_scored in quiz_scores %}
+                {% for quiz_id,no_of_questions,quiz_date,time_taken,total_scored in quiz_scores %}
                     <tr>
                         <td>{{ quiz_id }}</td>
                         <td>{{ no_of_questions if no_of_questions or 'N/A' }}</td>
                         <td>{{ quiz_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ time_taken }}</td>
                         <td class="fw-bold">{{ total_scored }}</td>
                     </tr>
                 {% endfor %}

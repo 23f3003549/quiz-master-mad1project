@@ -1,8 +1,8 @@
-from flask import render_template,request,url_for,flash,redirect,session
+from flask import render_template,request,url_for,flash,redirect,session,jsonify
 from app import app
 from extension import db
-from datetime import datetime
-import datetime
+from datetime import datetime, timedelta, time
+# import datetime
 from models import db, User,Subject,Quiz,Question,Chapter,Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -252,7 +252,7 @@ def new_quiz():
         chapter_id=request.form.get('chapter_id')
         date_of_quiz1 = request.form.get('date_of_quiz')
         if not date_of_quiz1:
-            date_of_quiz=datetime.date.today()
+            date_of_quiz=datetime.today().date()
         else:
             date_of_quiz=datetime.date.formisoformat(date_of_quiz1)    
         time_duration = request.form.get('time_duration')
@@ -275,18 +275,25 @@ def new_quiz():
 def edit_quiz(quiz_id):
     quiz= Quiz.query.get_or_404(quiz_id)
     if request.method == 'POST':
+        print(f"Updating Quiz ID: {quiz.id}")
+
         quiz.chapter_id = request.form.get('chapter_id')
-        date_of_quiz = datetime.date(request.form.get('date_of_quiz'))
-        if not date_of_quiz:
-            quiz.date_of_quiz= datetime.date.today()
+        date_of_quiz_str = request.form.get('date_of_quiz')
+        if date_of_quiz_str:
+            quiz.date_of_quiz= datetime.strptime(date_of_quiz_str, "%Y-%m-%d").date()
         else:
-            quiz.date_of_quiz = datetime.date.isoformat(date_of_quiz)    
+            quiz.date_of_quiz = datetime.today().date()  
 
         quiz.time_duration = request.form.get('time_duration')    
         quiz.notes = request.form.get('notes')
-
-        db.session.commmit()
+        try:
+           db.session.commit()
+           flash("Quiz updated successfullly", "success")
+        except Exception as e:
+           db.session.rollback()    
+           flash("error")
         return redirect( url_for('quizz') )
+
     else:
         chapters=Chapter.query.all()
         return render_template('edit_quiz.html', quiz=quiz, chapters=chapters)
@@ -308,9 +315,33 @@ def del_quiz(quiz_id):
         return redirect(url_for('quizz'))
     else:
         return "Quiz not found", 404
+    
+
+# ---------------------------------------------------------------------------------quiz details---------------------------------------------------------------------------------------
+@app.route('/quiz/details/<int:quiz_id>', methods=['GET'])
+def quiz_details(quiz_id):
+    quiz= Quiz.query.get_or_404(quiz_id)
+    if quiz:
+        chapter= Chapter.query.get(quiz.chapter_id)
+        subject = Subject.query.get(chapter.subject_id)
+        quiz_details ={
+            'quiz_id': quiz.id,
+            'chapter_name':chapter.name,
+            'chapter_description':chapter.description,
+            'subject_name':subject.name,
+            'subject_description':subject.description,
+            'date_of_quiz': quiz.date_of_quiz,
+            'time_duration':quiz.time_duration,
+            'no_of_questions': quiz.no_of_questions,
+            'notes':quiz.notes
+        }
+        return render_template('quiz_details.html', quiz_details=quiz_details)
+    else:
+        # flash ("Quiz not found", 404)
+        return redirect(url_for('quizz'))
 
 
-# ------------------------------------------------------------------Add Questions-------------------------------------------------------------   
+# ----------------------------------------------------------------------------------Add Questions-------------------------------------------------------------------------------------   
 @app.route('/question/add/<int:quiz_id>', methods=['GET','POST'])
 def add_questions(quiz_id):
         quiz =Quiz.query.get(quiz_id)
@@ -405,5 +436,109 @@ def user_dashboard():
 #     return render_template('user_dashboard.html',quizzes=quizzes)
 
 
+@app.route('/user/quiz_attempt/<int:quiz_id>/<int:question_num>', methods=['GET','POST'])
+def quiz_attempt(quiz_id, question_num):
+     user_id = session.get('user_id',1)
+     if not user_id:
+         flash("First logged in to attempt the quiz")
+         return redirect(url_for('login'))
+     quiz = Quiz.query.get(quiz_id)
+     questions= Question.query.filter_by(quiz_id = quiz_id).all()
+
+     if not quiz or not questions:
+         flash("Quiz or questions not found", "danger")
+         return redirect(url_for('user_dashboard'))
+     
+     quiz_duration= quiz.time_duration
+     
+     if question_num ==1:
+         session['quiz_start_time'] = datetime.now().isoformat()
+
+         existing_score = Scores.query.filter_by(user_id = user_id, quiz_id = quiz_id).first()
+         if existing_score:
+             existing_score.total_scored = 0
+             existing_score.date_of_attempt= datetime.today().date()
+             existing_score.time_taken = time(0,0,0)
+             db.session.commit()
+
+     total_time_seconds = 0       
+
+     if 'quiz_start_time' in session:
+         start_time = datetime.fromisoformat(session['quiz_start_time']) 
+         total_time_seconds  = (datetime.now() - start_time).total_seconds() 
+         hours = int(total_time_seconds // 3600)  
+         minutes = int((total_time_seconds % 3600) // 60)
+         seconds = int(total_time_seconds % 60)
+     
+     if total_time_seconds > (quiz_duration * 60):
+      flash("Time is up!!", "warning")
+      return redirect(url_for('user_dashboard'))
+         
+         
+
+     if question_num > len(questions):
+         return redirect(url_for('submit_quiz',quiz_id = quiz_id))
+     
+     question = questions[question_num - 1]
+
+     if request.method == 'POST' :
+         selected_option = request.form.get('option')
+         score_entry = Scores.query.filter_by( user_id = user_id, quiz_id = quiz_id).first()
+         if not score_entry:
+             score_entry = Scores(
+                 user_id = user_id,
+                 quiz_id = quiz_id,
+                 date_of_attempt = datetime.today().date(),
+                 time_taken= time(0,0,0),
+                 total_scored= 0
+
+             )
+             db.session.add(score_entry)
+
+         correct = selected_option and int(selected_option) == question.correct_option
+         if correct:
+             score_entry.total_scored += 1
+
+         score_entry.time_taken = time(hours,minutes,seconds)    
+         db.session.commit()
+         return redirect(url_for('quiz_attempt', quiz_id=quiz_id, question_num = question_num + 1))
+     
+     return render_template("show_quiz.html", quiz=quiz, question=question, question_num = question_num, total=len(questions))
+
+
+
+@app.route('/submit_quiz/<int:quiz_id>')
+def submit_quiz(quiz_id):
+    user_id = session.get('user_id',1)
+    if not user_id:
+        flash("log in first !!")
+    quiz =Quiz.query.get(quiz_id)
+    if not quiz:
+        flash("No quiz found", "warning")
+        return redirect(url_for('user_dashboard'))
+
+    score_details = Scores.query.filter_by(user_id = user_id, quiz_id= quiz_id).first()
+
+    if not score_details:
+      flash("No attempt record found", "warning")
+      return redirect(url_for('user_dashboard'))
+    
+    time_taken1 = str(score_details.time_taken)
+    return render_template('scores.html', quiz= quiz, total_score= score_details.total_scored,time_taken=time_taken1)
+
+
+@app.route('/user_scores')  
+def user_scores ():
+    user_id= session.get('user_id')
+      
+    scores = Scores.query.filter_by(user_id = user_id).all()   
+    if not scores:
+        return "No score found for this quiz", 404
+    quiz_scores=[]
+    for score in scores:
+        quiz = Quiz.query.get(score.quiz_id)
+        no_of_questions = Question.query.filter_by(quiz_id=quiz.id).count()
+        quiz_scores.append((quiz.id,no_of_questions, score.date_of_attempt, score.total_scored))
+    return render_template('user_scores.html', quiz_scores=quiz_scores)    
 
         

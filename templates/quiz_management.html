@@ -53,7 +53,7 @@
 
         <h2 >
           {% set chapter = chapters|selectattr('id', 'equalto', quiz.chapter_id)|list|first %}
-          <a href="{{ url_for('quizz', quiz_id=quiz.id) }}" style="text-decoration: none; color:black;">QUIZ{{ quiz.id }}({{ chapter.name }})</a>
+          <a href= "{{ url_for('quiz_details', quiz_id=quiz.id) }}" style="text-decoration: none; color:black;">QUIZ{{ quiz.id }}({{ chapter.name }})</a>
         </h2>
         <table class="table">
           <thead>

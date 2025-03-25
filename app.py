@@ -11,6 +11,7 @@ migrate.init_app(app, db)
 
 from models import *
 from routes import *
+from api import *
 
 
 

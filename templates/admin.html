@@ -31,11 +31,11 @@
           <a class="nav-link" href="#">Profile</a>
         </li>
         <li class="nav-item">
-            <a class="btn btn-danger" href="/login">logout</a>
+            <a class="btn btn-outline-danger" href="/login">logout</a>
           </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0" style="display:flex; margin-left:50%;">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <form method="GET" action="/admin" class="form-inline my-2 my-lg-0" style="display:flex; margin-left:50%;">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search Subject" aria-label="Search" name="query" value="{{ query or '' }}">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
       </form>
       <div>
@@ -45,7 +45,7 @@
     </div>
   </nav>
 {% if not subjects %}
-<h3>No subjects added yet</h3>
+<h3>No matching subjects added yet</h3>
 {% else %}
 {% for subject in subjects %}
   <div class="subs">
@@ -67,11 +67,6 @@
                <td>{{chapter.name}}</td>
                 <td>
                   {{ question_counts[ chapter.id ] }}
-                  <!-- {% set total_questions = 0 %}
-                  {% for quiz in chapter.quizs %}
-                  {% set total_questions = total_questions + quiz.no_of_questions %}
-                  {% endfor %}
-                  {{ total_questions }} -->
                 </td>
                 <td>
                     <a href="/chapter/edit/{{chapter.id}}" class="btn btn-warning">Edit</a>

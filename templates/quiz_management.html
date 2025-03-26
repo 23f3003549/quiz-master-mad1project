@@ -24,17 +24,17 @@
               <a class="nav-link" href="#">Quiz <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Summary</a>
+              <a class="nav-link" href="{{ url_for('admin_summary') }}">Summary</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
             </li>
             <li class="nav_item">
-                <a href="/login" class="btn btn-danger">Logout</a>
+                <a href="/login" class="btn btn-outline-danger">logout</a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0" style="display: flex; margin-left:50%;">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <form method="GET" action="/quizz" class="form-inline my-2 my-lg-0" style="display: flex; margin-left:50%;">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search chapter" aria-label="Search" name="query" value="{{ query or '' }}">
             
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
           </form>

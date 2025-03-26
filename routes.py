@@ -143,7 +143,16 @@ def logout():
 @app.route('/admin')
 
 def admin():
-    subjects = Subject.query.all()
+    query = request.args.get("query","").strip().lower()
+    print(f"Search Query: '{query}'")
+    query = query.strip()
+    if query:
+        subjects = Subject.query.filter(Subject.name.ilike(f"%{query}%")).all()
+    else:    
+        subjects = Subject.query.all()
+    print(f"Matching Subjects: {subjects}")    
+    if not subjects:
+        print("No subjects matched the query.")
     sub_chapters = {}
     chapter_quizs={}
     chapter_question ={}
@@ -156,9 +165,9 @@ def admin():
             chapter_quizs[ chapter.id ] = quizzes
             total_question = sum(quiz.no_of_questions for quiz in quizzes)
             chapter_question[chapter.id] = total_question
-    quiz = Quiz.query.first()       
+    # quiz = Quiz.query.first()       
     
-    return render_template('admin.html',subjects=subjects,sub_chapters=sub_chapters, chapter_quizs= chapter_quizs, question_counts = chapter_question)
+    return render_template('admin.html',subjects=subjects,sub_chapters=sub_chapters, chapter_quizs= chapter_quizs, question_counts = chapter_question, query=query)
 
 # ---------------------------------------------------adding subjects-------------------------------------------------------------------
 @app.route('/subject/add',methods=['GET','POST'])
@@ -238,13 +247,19 @@ def del_chap(chapter_id):
 # -------------------------------------------------------QUIZ PAGE--------------------------------------------------------------------------------------------
 @app.route('/quizz',methods=['GET','POST'])
 def quizz():
+    query = request.args.get("query", "").strip().lower()
     chapters = Chapter.query.all()
-    quizzes=Quiz.query.all()
+    if query:
+        filtered_chap = Chapter.query.filter(Chapter.name.like(f"%{query}%")).all()
+        chapter_ids = [chapter.id for chapter in filtered_chap]
+        quizzes = Quiz.query.filter(Quiz.chapter_id.in_(chapter_ids)).all()
+    else:    
+        quizzes=Quiz.query.all()
     # quizz_in_chapter = {}
     # for chapter in  chapters:
     #     quizz_in_chapter[chapter.id] = Quiz.query.filter_by(chapter_id = chapter.id).all()
     #     return render_template("quiz_management.html", chapters = chapters, quizz_in_chapter = quizz_in_chapter)
-    return render_template('quiz_management.html', quizzes=quizzes, chapters=chapters)
+    return render_template('quiz_management.html', quizzes=quizzes, chapters=chapters, query=query)
     
 #------------------------------------------------------------new quiz ------------------------------------------------------------------
 @app.route('/quiz/new', methods=['GET','POST'])
@@ -423,13 +438,32 @@ def edit_question(question_id):
 # --------------------------------------------------------------------------------user dashboard----------------------------------------------------------------------------------------
 @app.route('/user_dashboard', methods=['GET','POST'])
 def user_dashboard():
+    query = request.args.get("query", "").strip().lower()
+    search_type = request.args.get("search_type", "select")
     quizzes= Quiz.query.all()
     quiz_data = []
+
+    if query:
+        if search_type == "subject":    
+           matched_subjects = Subject.query.filter(Subject.name.ilike(f"%{query}%")).all()
+           subject_ids = [subject.id for subject in matched_subjects]
+           matched_chapters =Chapter.query.filter(Chapter.subject_id.in_(subject_ids)).all()
+           chapter_ids = [chapter.id for chapter in matched_chapters]
+           quizzes= Quiz.query.filter(Quiz.chapter_id.in_(chapter_ids)).all()
+        elif search_type == "chapter":
+            matched_chapters = Chapter.query.filter(Chapter.name.ilike(f"%{query}%")).all()
+            chapter_ids = [chapter.id for chapter in matched_chapters]
+            quizzes = Quiz.query.filter(Quiz.chapter_id.in_(chapter_ids)).all()
+
+        elif search_type == "date":
+            search_date = datetime.strptime(query, "%Y-%m-%d").date()
+            quizzes = Quiz.query.filter(Quiz.date_of_quiz == search_date).all()
+        
     for quiz in quizzes:
         chapter= Chapter.query.get(quiz.chapter_id)
         question_count = Question.query.filter_by(quiz_id=quiz.id).count()
         quiz_data.append((quiz,chapter, question_count))
-    return render_template('user_dashboard.html', quizzes=quiz_data)
+    return render_template('user_dashboard.html', quizzes=quiz_data,query = query, search_type= search_type)
         
 # @app.route('/quiz/display', methods=['GET','POST'])
 # def quiz_display():
@@ -538,9 +572,11 @@ def user_scores ():
     quiz_scores=[]
     for score in scores:
         quiz = Quiz.query.get(score.quiz_id)
+        chapter = Chapter.query.get(quiz.chapter_id)
+        chapter_name = chapter.name if chapter else "unknown chapter"
         no_of_questions = Question.query.filter_by(quiz_id=quiz.id).count()
         
-        quiz_scores.append((quiz.id,no_of_questions, score.date_of_attempt, score.time_taken, score.total_scored))
+        quiz_scores.append((quiz.id, chapter_name, no_of_questions, score.date_of_attempt, score.time_taken, score.total_scored))
         
     return render_template('user_scores.html', quiz_scores=quiz_scores)    
 

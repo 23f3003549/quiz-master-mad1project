@@ -32,12 +32,18 @@
                 <a href="{{ url_for('profile') }}" class="nav-link">profile</a>
             </li>
             <li class="nav-item">
-                <a href="/login" class="btn btn-danger">logout</a>
+                <a href="/login" class="btn btn-outline-danger">logout</a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0" style="display: flex; margin-left:50%">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 1rem;">Search</button>
+          <form method="GET" action="/user_dashboard"  class="form-inline my-2 my-lg-0" style="display: flex; margin-left:40%">
+            <select class="form-control mr-sm-2" type="search" style="margin-left: 0rem;" name="search_type">
+              <option value="" disable selected>select</option>
+              <option value="subject" {% if search_type == 'subject' %} selected {% endif %}>Subject</option>
+              <option value="chapter" {% if search_type == 'chapter' %} selected {% endif %}>Chapter</option>
+              <option value="date" {% if search_type == 'date' %} selected {% endif %}>Date</option>
+            </select>
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="query" value="{{ query or '' }}">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 0.5rem; margin-right:1rem;">Search</button>
           </form>
           <div>
             <h3 style="text-align: center;">Welcome User</h3>
@@ -52,6 +58,7 @@
             <thead class="bg-primary text-black">
                 <tr>
                     <th>Quiz Id</th>
+                    <th>Chapter</th>
                     <th>No of questions</th>
                     <th>Date</th>
                     <th>Time Taken</th>
@@ -59,9 +66,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for quiz_id,no_of_questions,quiz_date,time_taken,total_scored in quiz_scores %}
+                {% for quiz_id,chapter_name, no_of_questions,quiz_date,time_taken,total_scored in quiz_scores %}
                     <tr>
                         <td>{{ quiz_id }}</td>
+                        <td>{{ chapter_name }}</td>
                         <td>{{ no_of_questions if no_of_questions or 'N/A' }}</td>
                         <td>{{ quiz_date.strftime('%Y-%m-%d') }}</td>
                         <td>{{ time_taken }}</td>

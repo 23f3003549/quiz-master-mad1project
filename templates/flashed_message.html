@@ -1,0 +1,30 @@
+{% with messages=get_flashed_messages() %}
+{% if messages %}
+  <ul class=flashes style="padding: 0%;">
+  {% for message in messages %}
+  <div class= "alert alert-primary flash-message fade-out" role="alert" >
+    {{ message }}
+  </div>
+  {% endfor %}
+  </ul>
+
+<style>
+    .alert {
+         align-items: center;
+         text-align: center;
+         margin-left: 25%;
+         margin-right: 25%;
+         width: 50%;
+    }
+    .flash-message{
+        animation: fadeOut 2s ease-in-out forwards;
+    }
+
+    @keyframes fadeOut {
+        0% { opacity:1; }
+        80% { opacity:0.5;  }
+        100% { opacity:0; visibility: collapse; overflow: hidden; padding: 0%; height: 0%;}
+    }
+</style>
+{% endif %}
+{% endwith %}

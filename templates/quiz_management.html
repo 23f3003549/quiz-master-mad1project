@@ -44,6 +44,7 @@
         </div>
       </nav>
       <!-- --------------------------------------------------navbar end------------------------------------------------------- -->
+      {% include 'flashed_message.html' %}
        <h1 style="text-align: center;">Quiz Management</h1>
        <br>
        <br>
@@ -54,7 +55,8 @@
         <h2 >
           {% set chapter = chapters|selectattr('id', 'equalto', quiz.chapter_id)|list|first %}
           <a href= "{{ url_for('quiz_details', quiz_id=quiz.id) }}" style="text-decoration: none; color:black;">QUIZ{{ quiz.id }}({{ chapter.name }})</a>
-        </h2>
+        </h2><span><p>{{ quiz.notes }}</p></span>
+      
         <table class="table">
           <thead>
             <tr>

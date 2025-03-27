@@ -51,6 +51,8 @@
 
 </nav>
 
+{% include 'flashed_message.html' %}
+
     Hello {{ user.fullName }}
     <div class="profile-pic">
         <img src="https://api.dicebear.com/6.x/lorelei/svg?seed={{ user.fullName }}" width="100" alt="profile-pic">

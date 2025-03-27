@@ -50,6 +50,8 @@
           </div>
         </div>
       </nav>
+      {% include 'flashed_message.html' %}
+
       <h1 style="text-align: center;">Quiz Scores</h1>
       {% if not quiz_scores %}
       <h2 style="color: red;">No Scores available</h2>

@@ -11,6 +11,7 @@
 
 </head>
 <body>
+    {% include 'flashed_message.html' %}
     <h1>Add Subject</h1>
     <form method="POST" action="{{url_for('add_sub')}}" class="logform">
         <label for="subject_name" class="form-label" >Subject Name</label>

@@ -12,6 +12,8 @@
 </head>
 <body>
  <div>
+    {% include 'flashed_message.html' %}
+    
     <h1>Add chapter in {{subject.name}}</h1>
     <form method="POST" action="{{ url_for('add_chapter',subject_id=subject.id)}}" class="logform">
         <label for="chapter_name" class="form-lebel">Chapter Name</label>

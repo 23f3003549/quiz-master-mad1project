@@ -22,70 +22,70 @@ def index():
     #     flash("please login to continue")
     #     return redirect(url_for('login'))
 # --------------------------------------------------------------------login----------------------------------------------------------------------
-@app.route('/login')
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    if request.method == 'POST':
+      username=request.form.get('username')
+      password=request.form.get('password')
 
-@app.route('/login', methods=['POST'])
-def login_post():
-    username=request.form.get('username')
-    password=request.form.get('password')
-
-    if not username or not password:
+      if not username or not password:
         flash("Enter username and password")
         return redirect(url_for('login'))
     
-    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+      if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        flash("Admin logged in successfully")
         return redirect(url_for('admin'))
 
-    user=User.query.filter_by(username=username).first()  
+      user=User.query.filter_by(username=username).first()  
 
-    if not user:
+      if not user:
         flash("Username does not exists") 
         return redirect(url_for('login'))
-    if not check_password_hash(user.passhash, password):
+      if not check_password_hash(user.passhash, password):
         flash('Incorrect password')
         return redirect(url_for('login'))
     
     
-    session['user_id']=user.id
-    flash(" User Successfully login")  
-    return redirect('user_dashboard')
+      session['user_id']=user.id
+      flash(" User Successfully login")  
+      return redirect('user_dashboard')
+    return render_template('login.html')
 
 # ----------------------------------------------------------------login end-------------------------------------------------------------------------
 
-#-----------------------------------------------------------------register-------------------------------------------------------------------------- 
-@app.route('/register')
+#-----------------------------------------------------------------register--------------------------------------------------------------------------     
+@app.route('/register', methods=['GET','POST'])
 def register():
-    return render_template('register.html')
+    if request.method == 'POST':
 
+      username=request.form.get('username')
+      password=request.form.get('password')
+      c_password=request.form.get('password1')
+      fullname=request.form.get('fullname')
+      qualification=request.form.get('qualification')
+      dob=request.form.get('dob')
+      date_object=datetime.strptime(dob,'%Y-%m-%d')
     
-@app.route('/register', methods=['POST'])
-def register_post():
-    username=request.form.get('username')
-    password=request.form.get('password')
-    c_password=request.form.get('password1')
-    fullname=request.form.get('fullname')
-    qualification=request.form.get('qualification')
-    dob=request.form.get('dob')
-    date_object=datetime.strptime(dob,'%Y-%m-%d')
-    
-    if not username or not password or not c_password:
+      if not username or not password or not c_password:
         flash("please fill out these fields")
         return redirect(url_for('register'))
-    if password!=c_password:
+      if password!=c_password:
         flash("Password do not match ")
         return redirect(url_for('register'))
-    user = User.query.filter_by(username=username).first()
-    if user:
+      user = User.query.filter_by(username=username).first()
+      if user:
         flash('Username is already exists')
         return redirect(url_for('register'))
     
-    password_hash=generate_password_hash(password)
-    new_user = User(username=username, passhash=password_hash, fullName=fullname, qualification=qualification, dob=date_object)
-    db.session.add(new_user)
-    db.session.commit()
-    return redirect(url_for('login'))
+      password_hash=generate_password_hash(password)
+      new_user = User(username=username, passhash=password_hash, fullName=fullname, qualification=qualification, dob=date_object)
+      db.session.add(new_user)
+      db.session.commit()
+      flash("Registration successfull", "success")
+      return redirect(url_for('login'))
+    
+    return render_template('register.html')
 # ------------------------------------------------------------------register end-------------------------------------------------------------------------
 # ------------------------------------------------------------------auth----------------------------------------------------------------------------------
 def auth_require(func):
@@ -197,6 +197,26 @@ def del_sub(subject_id):
     else:
         return "Subject not found", 404
 
+# ----------------------------------------------------------------edit subject-------------------------------------------------------------------
+@app.route('/subject/edit/<int:subject_id>', methods=['GET','POST'])
+def edit_sub(subject_id):
+    subject = Subject.query.get_or_404(subject_id)
+
+    if request.method == 'POST':
+        subject_name = request.form.get("subject_name")
+        subject_description= request.form.get("subject_description")
+
+        if subject_name:
+          subject.name = subject_name
+
+        if subject_description:
+          subject.description = subject_description  
+
+        db.session.commit()    
+        flash("Subject updated successfully", "success")
+        return redirect(url_for('admin'))
+
+    return render_template("edit_subject.html", subject= subject)
 
 # ------------------------------------------adding chapter-----------------------------------------------------------------------------
 @app.route('/chapter/add/<int:subject_id>', methods=['GET','POST']) 
@@ -512,6 +532,7 @@ def quiz_attempt(quiz_id, question_num):
          
 
      if question_num > len(questions):
+         flash("you are done!")
          return redirect(url_for('submit_quiz',quiz_id = quiz_id))
      
      question = questions[question_num - 1]
@@ -547,6 +568,7 @@ def submit_quiz(quiz_id):
     user_id = session.get('user_id',1)
     if not user_id:
         flash("log in first !!")
+        return redirect(url_for('login'))
     quiz =Quiz.query.get(quiz_id)
     if not quiz:
         flash("No quiz found", "warning")
@@ -568,7 +590,8 @@ def user_scores ():
       
     scores = Scores.query.filter_by(user_id = user_id).all()   
     if not scores:
-        return "No score found for this quiz", 404
+        flash("No score record found for this quiz")
+        return "No score record found for this quiz", 403
     quiz_scores=[]
     for score in scores:
         quiz = Quiz.query.get(score.quiz_id)
@@ -586,7 +609,8 @@ def user_scores ():
 def user_summary():
     user_id = session.get('user_id')
     if not user_id:
-        return "User not loggerd in", 403
+        flash("You are not logged in.log in to continue")
+        return redirect(url_for('login'))
     subjects= Subject.query.all()
     sub_names=[]
     quiz_counts =[]
@@ -634,6 +658,6 @@ def admin_summary():
 
     subject_attempts = [subject[0] for subject in subject_wise_attempt]
     total_user_attempt = [subject[1] for subject in subject_wise_attempt]
-
+    
     return render_template('admin_summary.html',subjects= subjects,top_scores=top_scores,subject_attempts = subject_attempts,total_user_attempt= total_user_attempt)
    

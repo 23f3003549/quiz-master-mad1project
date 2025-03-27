@@ -1,9 +1,251 @@
-{% extends 'layout.html' %}
-{% block title %}
-    home
-{% endblock %}
-
-{% block content %}
-this is index page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'style_index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     
-{% endblock %}
+</head>
+<body>
+    <div class="container3" style="padding-bottom: 0%;">
+        <div class="container1" style="box-shadow: 2px 2px 4px black;">
+            <div class="container2" style=" width:100%; height:100vh;" id="glassmorphism">
+                <nav class="navbar navbar-expand-lg ">
+                    <img src="{{ url_for('static',filename='logo.png') }}" alt="Logo" id="logo">
+                    <div class="container-fluid" id="navdiv">
+                      <a class="navbar-brand" href="/" style="color: white;" id="navhov">
+                        <i class="fa-solid fa-house"></i>
+                        HOME
+                        </a>
+                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon" style="background-color: transparent;"></span>
+                      </button>
+                      <div class="collapse navbar-collapse" id="navbarNav" >
+                        <ul class="navbar-nav">
+                            
+                            <li class="nav-item">
+                              <a class="nav-link" href="/login" style="color: white;" id="navhov">LOGIN</a>
+                             </li>
+                             <li class="nav-item">
+                              <a class="nav-link" href="{{ url_for('register') }}" style="color: white;" id="navhov">REGISTER</a>
+                             </li>
+                           
+                        </ul>
+                      </div>
+                    </div>
+                  </nav>
+
+                  <div class="text_container" id="text_cont">
+                    <h2 style="font-size: 40px; font-weight:bold;"><span id="land-text" >CHALLANGE YOUR</span> MINDS</h2>
+                    
+                    <h2 style="font-size: 40px; font-weight:bold;"> <span id="land-text">EXPAND YOUR</span> HORIZONS</h2>
+                    <br>
+                    <p id="para">Your journey to knowledge starts here</p>
+                    <p id="para">Quizzes that educate, engage, and inspire</p>
+                    <br>
+                    <a href="/login" class="btn btn-outline-info" style="color:aliceblue; font-weight:bold; border-color:white;">Login</a>
+                    <a href="/register" class="btn btn-outline-info" style="color: aliceblue; font-weight:bold; border-color:white;">Register</a>
+                  </div>
+                </div>
+            </div>
+            <div>
+
+            </div>
+        </div>
+<!-- -=================================================================our service========================================================== -->
+         <div class="service">
+            <!-- <br> -->
+            <div style="padding-top: 10px; height:60px" id="servehead">
+                <h2 style="text-align: center; font-weight:900; font-size:35px; text-decoration:underline; padding-bottom:1rem; color:rgb(28, 77, 98); text-shadow:1px 1px 2px rgb(255, 255, 255);">OUR SERVICES</h2>
+            </div> 
+            
+            
+            <div class="card-container">
+                <div class="each-container">
+                    <div class="card1">
+                        <div class="front" style="background-image: url(/static/quizzes.webp);">
+                            <h5>Thousand of quizzes</h5>
+                        </div>
+
+                        <div class="back">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>Thousnds of subjectwise and chapterwise organised quizzes helps you for better understanding of the topic</p>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="each-container">
+                    <div class="card1">
+                        <div class="front" style="background-image: url(/static/progress.webp);">
+                            <h5>Progress Tracking</h5>
+                        </div>
+
+                        <div class="back">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>Regular tracking of your scores and progress gives you a deeper insights of your preparation</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="each-container">
+                    <div class="card1">
+                        <div class="front" style="background-image: url(/static/Timed.webp);">
+                            <h5>Timmed Quizzes</h5>
+                        </div>
+
+                        <div class="back">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>Timmed quizzes provides exam like environtment to think faster and prepare you for the final call</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="each-container">
+                    <div class="card1">
+                        <div class="front" style="background-image: url(/static/secure.webp);">
+                            <h5>Secure</h5>
+                        </div>
+
+                        <div class="back">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <p>Authourised and secure platform where all your data are safe</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+
+         </div>
+
+
+         <div class="testimonial">
+            <div class="testi-heading">
+                <h3>Hear From Our Users</h3>
+                <p>Thousand of learners nd quiz enthusiasts have improved their skills using our platform.
+                    <p>Here is what they have to share about their journey with us!!</p>
+                </p>
+                <br>
+            </div>
+
+            <div class="testi-box">
+                <div class="testi-outer" >
+                    <div class="testi-profile" style="background-image: url(/static/pic3.jpg);">
+                    </div>
+                    <div class="testi-text">
+                        <h3>Subhasmita</h3>
+                        <p>This is a great website for exam preparation.I'm very very thankful to the entire team behind it.</p>
+                    </div>
+                    <div class="testi-icon">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-linkedin"></i>
+                    </div>
+                </div>
+
+                <div class="testi-outer">
+                    <div class="testi-profile" style="background-image: url(/static/pic1.webp);">
+                        
+                    </div>
+                    <div class="testi-text">
+                        <h3>Subhashree</h3>
+                        <p>This is one of the best websites I have ever wintnessed.This website really helped me a lot during my exam preparation.I would suggest try it atleast once. </p>
+                        
+                    </div>
+                    <div class="testi-icon">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-linkedin"></i>
+                    </div>
+                </div>
+
+                <div class="testi-outer" >
+                    <div class="testi-profile" style="background-image: url(/static/pic2.webp);">
+                       
+                    </div>
+                    <div class="testi-text">
+                        <h3>Sujal</h3>
+                        <p>An awesome website to excel in your exam preparation journey.I highly recommend it to every student out there.</p>
+                    </div>
+                    <div class="testi-icon">
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-linkedin"></i>
+                    </div>
+                </div>
+            </div>
+         </div>
+        
+
+         <div class="footer">
+            <div class="glassmorph">
+                <div class="logoicon" >
+                 <br>  
+                <h6 style="font-size: 35px; font-family:'Times New Roman', Times, serif;" >COQUIZ</h6>
+                <h6 style="font-size: 20px; font-family:'Times New Roman', Times, serif">Challenge your mind,expand your horizons</h6>
+                </div>
+                <div class="contact">
+                    <h4>Contact Us</h4>
+                    <p>Email:coquiz@123.gmail.com</p>
+                    <p>ph no:9182736450</p>
+                    <p>Address:Coquiz near quizmaster</p>
+                </div>
+                <div class="follow">
+                    <h4>Follow Us</h4>
+                    <br>
+                    <br>
+                
+                    <div style="display: flex; justify-content:space-around; font-size:30px" >
+                        <i class="fa-brands fa-facebook"></i>
+                        <i class="fa-brands fa-twitter"></i>
+                        <i class="fa-brands fa-instagram"></i>
+                        <i class="fa-brands fa-linkedin"></i>
+                        
+
+                    
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <h6><span><i class="fa-regular fa-copyright"></i></span>2025 your company.All rights reserved</h6>
+            </div>
+           
+         </div>
+        
+            
+
+         
+
+    </div>
+
+
+  
+       
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+ 
+</body>
+</html>

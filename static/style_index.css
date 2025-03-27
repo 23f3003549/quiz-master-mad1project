@@ -1,0 +1,426 @@
+body,html {
+    height: 100%;
+    margin: 0%;
+    padding: 0%;
+    background: none !important;
+
+}
+.container2 {
+    background-image: url("/static/books.jpeg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    
+
+}
+
+#logo{
+    width: 150px;
+    height: 110px;
+    padding-left: 0px;
+    margin-left: 0px;
+}
+#navhov{
+   margin-right: 3rem;
+   position: relative;
+}
+#navhov::after{
+    content: "";
+    position: absolute;
+    width:0 ;
+    height: 2px;
+    background: #ffffff;
+    left: 50%;
+    bottom: 0;
+    transition: 0.3s ease-in-out;
+    transform: translateX(-50%);
+}
+#navhov:hover::after{
+    width: 100%;
+}
+#navdiv{
+    justify-items: center;
+    margin-left: 2rem;
+    
+}
+#text_cont{
+    position: absolute;
+    top: 50%;
+    right: 50px;
+    transform:translateY(-50%);
+    padding: 20px;
+    color: aqua;
+    font-weight: bolder;
+    font-size: 20px;
+    text-align: center;
+    font-family:poppins;
+    text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+    
+}
+#para{
+    font-size: 27px;
+    font-weight: normal;
+    font-family:'Times New Roman', Times, serif;
+    color:rgb(255, 255, 255);
+    text-shadow: 2px 2px 4px rgba(82, 60, 192, 0.7);
+}
+#land-text{
+    color:rgb(255, 255, 171);
+}
+#servehead{
+    font-family: poppins;
+    font-weight: 600px;
+    margin-top:2 rem;
+    box-shadow: 4px 4px 6px black;
+    /* background: lightblue; */
+    text-shadow: 2px 2px 4px black;
+}
+.card-container{
+    display: flex;
+   
+    
+}
+.each-container{
+    z-index: 0;
+    position: relative;
+    width: 250px;
+    height: 320px;
+    /* padding: 10px; */
+    margin: 4rem ;
+    
+    border: none; */
+}
+.card1{
+    z-index: 1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: all 0.5s ease;
+   ;
+    
+    
+    
+    
+}
+.front{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    backface-visibility: hidden;
+    color: rgb(30, 102, 101);
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bolder;
+    font-style:normal;
+    font-size: 20px;
+    text-shadow: 0.5px 0.5px 1.5px rgb(34, 109, 156);
+    /* background-color: aqua; */
+    background-size: cover !important;
+    background-repeat: no-repeat;
+    border-radius: 10px%;
+    text-align: center;
+    box-shadow: 6px 6px 4px 4px rgb(19, 24, 70);
+    
+}
+.back{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform: rotateY(180deg);
+    backface-visibility: hidden;
+    color: black;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px black;
+    text-align: center;
+    align-items: center;
+    font-weight: bolder;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-spacing-trim: 5px;
+    word-spacing: 10px;
+    
+} 
+
+.card1:hover{
+    transform: rotateY(180deg);
+}
+p.card1.back{
+    font-size: larger;
+    font-family: cursive;
+
+
+}
+.testi-heading{
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: lighter;
+    text-decoration:none;
+    margin-bottom: 1rem;
+    
+}
+.testi-heading h3{
+    text-decoration:underline;
+    font-weight: 900;
+    text-align: center;
+    font-family:poppins;
+}
+.testi-box{
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 1rem;
+   
+    padding-bottom: 5rem;
+}
+.testi-outer{
+    position: relative;
+    width: 350px;
+    height: 350px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(2px);
+    color: white;
+    font-size: 10px;
+    text-align: center;
+    
+   
+    
+
+}
+.testi-profile{
+    position: relative;
+    width: 110px;
+    height:110px;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    left:33.5%;
+    top:1rem;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: trnsform 0.1s ease-out, border-radius 0.3s ese-out;
+}
+.testi-profile:hover{
+    transform: scale(1.1);
+}
+
+.testi-text{
+    top:30px;
+    width: 280px;
+    height: 130px;
+    left:9%;
+    position: relative;
+    text-align: center;
+
+}
+.testi-text{
+    color:black;
+    font-family: sans-serif;
+    font-size: larger;
+}
+.testi-icon{
+    position: relative;
+    width:280px;
+    height: 35px;
+    left:9%;
+    top:17%;
+    
+}
+.testi-icon i{
+    font-size: 24px;
+    color: rgb(0, 0, 0);
+    display: inline-block;
+    justify-content: space-around;
+    margin-left: 10px;
+    margin-right: 8px;  
+
+}
+.footer{
+    position: relative;
+    width: 100%;
+    height: 25rem;
+    background-image: url(/static/Footer.jpeg);
+    background-size: cover;
+    background-repeat: repeat;
+}
+.copyright{
+    position: relative;
+    width: 100%;
+    height: 3rem;
+    background: rgb(255, 255, 255);
+    top:28%;
+    text-align: center;
+
+}
+.copyright h6{
+    padding-top: 1.2rem;
+}
+  
+.glassmorph{
+    position: relative;
+    width: 100%;
+    height: 15rem;
+    top: 14%;
+    background: rgba(75, 69, 69, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 6px rgb(0,0, 0,0.1);
+    color: aliceblue;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+       
+
+}
+.logoicon{
+    padding-top: 2rem;
+    position: relative;
+    width: 20%;
+    /* border: 1px solid black; */
+    justify-content: space-around; 
+    text-shadow: 1px 1px 2px rgb(42, 41, 41); 
+}
+.i{
+    position: relative;
+    width:60%;
+    height: 70%;
+    left: 20%;
+    top:12%;
+    /* border: 1px solid black; */
+    border-radius: 50%;
+    background-image: url(/static/logo.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+
+   
+}
+
+
+.contact{
+    padding: 2rem;
+    position: relative;
+    width: 20%;
+    text-shadow: 1px 1px 2px rgb(33, 32, 32);
+    /* border: 1px solid black; */
+
+}
+.follow{
+    padding-top: 2rem;
+    position: relative;
+    width: 20%;
+    text-shadow: 1px 1px 2px rgb(42, 41, 41);
+    /* border: 1px solid black; */
+
+}
+.logbg{
+    
+    background:linear-gradient(1135deg,#314aae,pink,#1BFFFF);
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+   background: rgba(255, 255, 255.0.2);
+}
+@keyframes glowing {
+    0%{text-shadow: 0 0 5px rgba(255.215,0,0.5);}
+    50%{text-shadow: 0 0 15px rgba(255.215,0,0.1);}
+    10%{text-shadow: 0 0 5px rgba(255.215,0,0.5);}
+}
+.hero-text{
+    text-shadow: 0 0 8px rgba(255,255,255,0.5);
+    animation: glowing 5s infitine alternate;
+    /* font-weight: bold; */
+}
+.logoglass{
+    position: relative;
+    width: 60%;
+    height: 80%;
+    top:5%;
+    margin-left: 20%;
+    border: 1px 1px 4px  rgba(146, 146, 199, 0.3);
+    background: rgba(44, 59, 73, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 4px 30px rgb(255, 255, 255,0.4);
+    align-items: center;
+    text-align: center;
+
+}
+.form-label{
+    color: rgb(255, 255, 255);
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    padding-top: 10px;
+    text-shadow: 1px 1px 2px black;
+    font-size: large;
+    
+    
+}
+.logtext{
+    position: relative;
+    /* border: 2px solid black; */
+    width:60%;
+    height: 70%;
+    left: 20%;
+    top:12%;
+   
+}
+.wb{
+    position: relative;
+    color: aliceblue;
+    border-radius: 2px solid black;
+    padding-bottom: rem;
+    font-family: cursive;
+}
+.lr{
+    position: relative;
+    padding-top: 1.5rem;
+    font-size: large;
+    text-shadow: 1px 1px 2px black;
+
+
+}
+.continer-fluid{
+    font-family: cursive;
+}
+.regh{
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-bottom:0;
+    top:2%;
+}
+.logoclass #logoreg{
+    position: relative;
+    border: 1px solid black;
+    
+}
+#reg{
+    background:linear-gradient(1135deg,#314aae,pink,#1BFFFF);
+    width: 100%;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+   background: rgba(255, 255, 255.0.2);
+   text-shadow: 1px 1px 2px solid black;
+  
+}
+/* logoglassr{
+    position: relative;
+    width: 60%;
+    height: 80%;
+    top:3%;
+    margin-left: 20%;
+    border: 1px 1px 4px  rgba(146, 146, 199, 0.3);
+    background: rgba(44, 59, 73, 0.3);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    box-shadow: 2px 4px 30px rgb(255, 255, 255,0.4);
+    align-items: center;
+    text-align: center;
+
+} */
+
+.form-label #regh{
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;}
+
+ .form-control{
+    background-color: whitesmoke;
+ }   

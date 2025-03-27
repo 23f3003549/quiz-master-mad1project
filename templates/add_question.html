@@ -11,6 +11,7 @@
     
 </head>
 <body>
+    {% include 'flashed_message.html' %}
     <div>
         <h1>Add Question to quiz:{{ quiz.id }}</h1>
         <form action="{{ url_for('add_questions', quiz_id= quiz.id) }}" method="post" class="logform">

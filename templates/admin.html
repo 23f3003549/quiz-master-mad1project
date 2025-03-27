@@ -44,6 +44,7 @@
       
     </div>
   </nav>
+  {% include 'flashed_message.html' %}
 {% if not subjects %}
 <h3>No matching subjects added yet</h3>
 {% else %}
@@ -56,6 +57,7 @@
         <tr>
             <th>Chapter Name</th>
             <th>No of Questions</th>
+            <th>Description</th>
             <th>Actions</th>
         </tr>
         </thead>
@@ -68,6 +70,7 @@
                 <td>
                   {{ question_counts[ chapter.id ] }}
                 </td>
+                <td>{{ chapter.description }}</td>
                 <td>
                     <a href="/chapter/edit/{{chapter.id}}" class="btn btn-warning">Edit</a>
                     <a href="/chapter/delete/{{chapter.id}}" class="btn btn-danger">delete</a>
@@ -88,6 +91,7 @@
       <i class="fa-solid fa-trash"></i>
       Subject
       </a>
+      <a href="/subject/edit/{{ subject.id }}">Edit</a>
       
     </div>
   </div>

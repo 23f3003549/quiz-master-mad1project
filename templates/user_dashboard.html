@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'style_index.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -12,7 +13,7 @@
 </head>
 <body>
     <!-- ---------------------------------------------------------------------navbar-------------------------------------------------------------------------------------- -->
-     <div class="usernav">
+     <div class="usernav" style="box-shadow: 1px 1px 3px grey;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/user_dashboard">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,8 +37,8 @@
                 <a href="/login" class="btn btn-outline-danger">logout</a>
             </li>
           </ul>
-          <form method="GET" action="/user_dashboard"  class="form-inline my-2 my-lg-0" style="display: flex; margin-left:40%">
-            <select class="form-control mr-sm-2" type="search" style="margin-left: 0rem;" name="search_type">
+          <form method="GET" action="/user_dashboard"  class="form-inline my-2 my-lg-0" style="display: flex; margin-left:39%">
+            <select class="form-control mr-sm-2" type="search" style="margin-left: 0rem; margin-right:4px;" name="search_type">
               <option value="" disable selected>select</option>
               <option value="subject" {% if search_type == 'subject' %} selected {% endif %}>Subject</option>
               <option value="chapter" {% if search_type == 'chapter' %} selected {% endif %}>Chapter</option>
@@ -47,7 +48,7 @@
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="margin-left: 0.5rem; margin-right:1rem;">Search</button>
           </form>
           <div>
-            <h3 style="text-align: center;">Welcome User</h3>
+            <h3  class="wel" id="wel">Welcome User</h3>
           </div>
         </div>
       </nav>
@@ -56,11 +57,11 @@
 
     <!-- -----------------------------------------------------------------------------Quiz Display-------------------------------------------------------------------------------------- -->
 {% if not quizzes %}
-<h2 style="text-align: center;">No Upcoming quizzes</h2>
+<h2 style="text-align: center; color:Red; font-weight:bold" >No Upcoming quizzes</h2>
 {% else %}
-    <div>
+    <div class="userdash" id="userdash">
     
-    <h2 style="text-align:center">Upcoming quizzes</h2>
+    <h2 style="text-align:center; font-family: 'Courier New', Courier, monospace; font-weight:bold; font-size:50px" >Upcoming Quizzes</h2>
     <table class="table"> 
         <thead class="thead-dark">
             <tr>

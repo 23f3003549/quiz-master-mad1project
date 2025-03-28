@@ -13,7 +13,8 @@
 </head>
 <body>
        <!-- ---------------------------------------------------------------------navbar-------------------------------------------------------------------------------------- -->
-       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       <div class="usernav" style="box-shadow:1px 2px 4px grey ">
+       <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-left: 1rem; height:4.6rem">
         <a class="navbar-brand" href="/admin">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -39,6 +40,7 @@
           </div>
         </div>
       </nav>
+       </div>
 
       <!-- -------------------------------------------------------------------------------bar graph for no of quizes per subject------------------------------------------------------ -->
       {% include 'flashed_message.html' %}

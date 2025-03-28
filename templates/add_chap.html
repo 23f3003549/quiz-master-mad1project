@@ -12,17 +12,20 @@
     
 </head>
 <body>
- <div>
-    {% include 'flashed_message.html' %}
+ <div class="add-main">
     
-    <h1>Add chapter in {{subject.name}}</h1>
-    <form method="POST" action="{{ url_for('add_chapter',subject_id=subject.id)}}" class="logform">
-        <label for="chapter_name" class="form-lebel">Chapter Name</label>
-        <input type="text" name="chapter_name" placeholder="chapter name" class="form-control" required>
+    {% include 'flashed_message.html' %}
+    <div class="profile-form">
+    
+    <form method="POST" action="{{ url_for('add_chapter',subject_id=subject.id)}}" class="logform" id="user-form">
+<div class="add-inner">
+        <h1 style="margin-top:6rem; margin-bottom:2rem;">Add chapter in {{subject.name}}</h1> 
+        <label for="chapter_name" class="form-lebel" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size:larger" >Chapter</label>
+        <input type="text" name="chapter_name" placeholder="chapter name" class="form-control" required style="border: 1px solid black;">
         <br>
-        <label for="chapter_description" class="form-lebel" >Description</label>
+        <label for="chapter_description" class="form-lebel" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size:larger;" >Description</label>
         <div>
-            <textarea name="chapter_description" placeholder="description"></textarea>
+            <textarea name="chapter_description" placeholder="description" style="border: 1px solid black;"></textarea>
         </div>
         <div style="display: inline-block;">
         <button type="submit" class="btn btn-success">submit</button>
@@ -30,8 +33,9 @@
         <div style="display: inline-block;">
             <a href="{{ url_for('admin') }}" class="btn btn-danger">Cancel</a>
         </div>
+    </div>
     </form>
-   
+    </div>
  </div>
     
 

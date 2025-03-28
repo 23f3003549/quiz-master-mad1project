@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename= 'style_index.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -11,48 +12,51 @@
     
 </head>
 <body>
-    {% include 'flashed_message.html' %}
-    <div class="container mt-5">
-        <h2>Quiz Details</h2>
+   
+    <div class="quiz-details" style="width: 100%; height:90vh;">
+        {% include 'flashed_message.html' %}
+        <div class="container mt-5" id="quiz-details">
+        <h2 class="quiz-card-title">Quiz Details</h2>
+        <div class="quiz-inner" id="quiz-inner">
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Quiz Id</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Quiz Id</div>
             <div class="col-md-8">{{ quiz_details.quiz_id }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Chapter</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Chapter</div>
             <div class="col-md-8">{{ quiz_details.chapter_name }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Chapter description</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Chapter description</div>
             <div class="col-md-8">{{ quiz_details.chapter_description }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Subject</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Subject</div>
             <div class="col-md-8">{{ quiz_details.subject_name }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Subject description</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Subject description</div>
             <div class="col-md-8">{{ quiz_details.subject_description }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Date Of Quiz</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Date Of Quiz</div>
             <div class="col-md-8">{{ quiz_details.date_of_quiz }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Duration</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Duration</div>
             <div class="col-md-8">{{ quiz_details.time_duration }} minutes</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">No of Question</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">No of Question</div>
             <div class="col-md-8">{{ quiz_details.no_of_questions }}</div>
         </div>
         <div class="row mb-3">
-            <div class="col-md-4 font-weight-bold">Notes</div>
+            <div class="col-md-4 font-weight-bold" style="font-weight: bold;">Notes</div>
             <div class="col-md-8">{{ quiz_details.notes }}</div>
             
-        </div >
-        
-        
+        </div>
+        </div>
+        </div>
         
     </div>
  

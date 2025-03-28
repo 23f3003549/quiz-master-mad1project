@@ -13,8 +13,8 @@
 </head>
 <body>
        <!-- ---------------------------------------------------------------------navbar-------------------------------------------------------------------------------------- -->
-       <div class="usernav" style="box-shadow: 1px 1px 3px grey;">
-       <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       <div class="usernav" style="box-shadow: 1px 1px 3px grey;" >
+       <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-left: 1rem; height:4.6rem" id="chart-nav">
         <a class="navbar-brand" href="/user_dashboard">Home</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -60,15 +60,17 @@
       <h1 style="text-align:center; font-family: 'Courier New', Courier, monospace; font-weight:bold; font-size:50px" >Summary</h1>
       <br>
       <br>
-      <div style="position: relative; display:inline-block; margin-left:10%">
+      <div class="chart">
+      <div class="bar" style="position: relative; display:inline-block; margin-left:10%">
         <h3>Subject-wise no of quizzes</h3>
         <canvas id="myChartBar"></canvas>
       </div>
 
-      <div style="position: relative; display:inline-block; margin-left:20%">
+      <div class="pie" style="position: relative; display:inline-block; margin-left:20%">
         <h3>Month-wise no of quizzes attempted</h3>
         <canvas id="myChartPie"></canvas>
       </div>
+    </div>
       
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       

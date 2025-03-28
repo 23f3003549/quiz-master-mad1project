@@ -128,15 +128,15 @@ def profile_post():
     user.passhash=new_password
     user.fullName=newname
     db.session.commit()
-    flash("Updated successfully ")
+    flash("Updated successfully")
     return redirect(url_for('user_dashboard'))
 
 
 # -------------------------------------------------------------------logout-----------------------------------------------------------------------------------
 @app.route('/logout')
-
 def logout():
     session.pop('user_id')
+    flash("Log out successfully!!")
     return redirect(url_for('login'))
 
 # ----------------------------------------------------------------Admin Dashboard-----------------------------------------------------------------------

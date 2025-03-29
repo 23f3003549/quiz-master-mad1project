@@ -1,9 +1,9 @@
-from flask import render_template,request,url_for,flash,redirect,session,jsonify
+from flask import render_template,request,url_for,flash,redirect,session
 from app import app
 from extension import db
 from datetime import datetime, timedelta, time
 # import datetime
-from models import db, User,Subject,Quiz,Question,Chapter,Scores
+from models import db, Admin,User,Subject,Quiz,Question,Chapter,Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from config import Config
@@ -15,12 +15,16 @@ ADMIN_PASSWORD = Config.ADMIN_PASSWORD
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-    # if 'user_id' in session:
-    #   return render_template('index.html')
-    # else:
-    #     flash("please login to continue")
-    #     return redirect(url_for('login'))
+     db.create_all()
+     if not Admin.query.first():
+         new_admin= Admin(username ="admin", password="adminpassword@123")
+         db.session.add(new_admin)
+         db.session.commit()
+         return render_template('index.html')
+     else:    
+      return render_template('index.html')
+
+   
 # --------------------------------------------------------------------login----------------------------------------------------------------------
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -32,10 +36,12 @@ def login():
       if not username or not password:
         flash("Enter username and password")
         return redirect(url_for('login'))
-    
-      if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-        flash("Admin logged in successfully")
-        return redirect(url_for('admin'))
+      admin=Admin.query.filter_by(username=username).first()
+
+    #   if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+      if username == (admin.username or ADMIN_USERNAME) and password == (admin.password or ADMIN_PASSWORD):
+         flash("Admin logged in successfully")
+         return redirect(url_for('admin'))
 
       user=User.query.filter_by(username=username).first()  
 

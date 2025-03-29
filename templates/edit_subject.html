@@ -12,26 +12,31 @@
 
 </head>
 <body>
+    <div class="add-main">
     {% include 'flashed_message.html' %}
-    <div class="container">
-        <h2>Edit Subject</h2>
+    <div class="profile-form">
+        
         <br>
-        <form method="post">
+        <form method="post" class="logform" id="user-form">
+            <div class="add-inner" style="margin-top: 4rem;">
+            <h2 style="margin-bottom: 2rem;">Edit Subject</h2>
             <div class="mb-3">
-                <label for="subject_name" class="form-lavel">Subject Name:</label>
+                <label for="subject_name" class="form-label"  style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger;text-shadow:none;">Subject Name:</label>
                 <input type="text" class="label-control" id="subject_name" name="subject_name" value="{{ subject.name }}">
             </div>
             <br>
             <div class="mb-3">
-                <label for="subject_description" class="form-label">Subject description:</label>
-                <textarea name="subject_description" id="subject_description" class="form-control">{{ subject.description }}</textarea>
+                <label for="subject_description" class="form-label" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger; text-shadow:none;">Subject description:</label>
+                <textarea name="subject_description" id="subject_description" style="border: 1px solid black;" class="form-control">{{ subject.description }}</textarea>
             </div>
             <button type="submit" class=" btn btn-primary">Update</button>
             <a href="{{ url_for('admin') }}" class=" btn btn-danger">Cancel</a>
+        </div>
         </form>
 
 
     </div>
+</div>
 
 
 

@@ -12,17 +12,20 @@
     
 </head>
 <body>
+    <div class="add-main">
     {% include 'flashed_message.html' %}
-    <h2>Edit your chapter</h2>
-    <form action="" method="POST" class="form">
+    <div class="profile-form">
+    <form action="" method="POST" class="logform" id="user-form">
+        <div class="add-inner" style="margin-top: 6rem !important;">
+        <h2>Edit your chapter</h2>
         <div class="form-group">
-        <label for="chapter_name" class="form-label">Chapter Name</label>
-        <input type="text" name="chapter_name" id="chapter_name" class="form-control" value="{{ chapter.name }}" placeholder="new chapter name" required>
+        <label for="chapter_name" class="form-label" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger;text-shadow:none;">Chapter Name</label>
+        <input type="text" name="chapter_name" id="chapter_name" class="form-control" value="{{ chapter.name }}" placeholder="new chapter name" required style="border: 1px solid rgb(59, 59, 59);">
         </div>
         <br>
-        <div class="form-group">
-            <label for="chapter_description" class="form-label">Description</label>
-            <textarea name="chapter_description" placeholder="new description"></textarea>
+        <div class="mb-3">
+            <label for="chapter_description" class="form-label" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger;text-shadow:none;">Description:</label>
+            <textarea name="chapter_description" placeholder="new description" class="form-control" style="border: 1px solid rgb(60, 59, 59);"></textarea>
         </div>
         <div style="display: inline-block;">
         <button type="submit" class="btn btn-success">Update</button>
@@ -30,7 +33,10 @@
         <div style="display: inline-block;">
             <a href="{{ url_for('admin') }}" class="btn btn-danger">Cancel</a>
         </div>
+    </div>
     </form>
+</div>
+</div>
  
     
       <!-- Bootstrap Bundle with Popper -->

@@ -65,7 +65,7 @@ body,html {
     text-shadow: 2px 2px 4px rgba(82, 60, 192, 0.7);
 }
 #land-text{
-    color:rgb(255, 255, 171);
+    color:#ffffab;
 }
 #servehead{
     font-family: poppins;
@@ -782,4 +782,51 @@ h3.qst{
     left: 15%;
     top:15%;
     /* border: 1px solid black; */
+}
+#quiz-notes{
+    position: relative;
+    /* border: 1px solid black; */
+    height: 20%;
+    margin-top: -3rem;
+}
+.ad-logmor{
+    position: relative;
+    /* border: 1px solid black; */
+    width: 60%;
+    left: 20%;
+    height: 130%;
+}
+.q-form{
+    border: 1px solid rgb(236, 227, 227);
+    width: 100%;
+    padding-right: 10%;
+    padding-left: 10%;
+    border-radius: 15px;
+    backdrop-filter: blur;
+    background: #ffffff;
+    box-shadow: 4px 4px 6px rgb(113, 110, 116);
+}
+.q-button{
+    text-align: center;
+    margin-top: 1rem;
+}
+.q-form .logform .form-label{
+    color: #343a40;
+    text-shadow: none;
+}
+.q-form .logform .form-control{
+    /* border:#050505 !important; */
+}
+.edq{
+    margin-top: 2rem;
+}
+#place{
+    margin-top: 2rem;
+    border: 2px solid rgb(255, 50, 50);
+}
+.form-group #quiz-notes{
+    position: relative;
+    /* border: 1px solid black; */
+    height: 20%;
+    margin-top: -3rem;
 }

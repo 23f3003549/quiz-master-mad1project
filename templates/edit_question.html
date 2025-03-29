@@ -13,56 +13,64 @@
     <title>Edit Question</title>
 </head>
 <body>
+    <div class="add-main">
     {% include 'flashed_message.html' %}
-    <h2>Edit your question</h2>
-    <div>
-        <form method="post" class="log-form">
+    
+    <div class="logmor" style="position: relative ; width:60%; left:21%;">
+        <h2 style="text-align: center; padding-top:0%; font-family:Georgia, 'Times New Roman', Times, serif">Edit your question</h2>
+        <div class="q-form">
+         <form method="post" class="log-form">
             <div>
-                <label for="question_title" class="form-label">Question Title</label>
-                <input type="text" name="question_title" id="question_title" class="form-control" value="{{ question.question_title }}" required>
+                <label for="question_title" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Question Title</label>
+                <input type="text" name="question_title" id="question_title" class="form-control" value="{{ question.question_title }}" required style="border: 1px solid black; color:rgb(0, 0, 0);text-shadow:none;">
             </div>
             <div>
-                <label for="question_text" class="form-label">Question Text</label>
-                <textarea name="question_text" id="question_text" class="form-control" required>{{ question.question_text }}</textarea>
+                <label for="question_text" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Question Text</label>
+                <textarea name="question_text" id="question_text" class="form-control" required style="border: 1px solid black; color:rgb(0, 0, 0);text-shadow:none;">{{ question.question_text }}</textarea>
             </div>
             <br>
             <div>
-                <label for="option1" class="form-label">Option1</label>
-                <input type="text" name="option1" id="option1" class="form-control" value="{{ question.option1 }}" >
+                <label for="option1" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Option1</label>
+                <input type="text" name="option1" id="option1" class="form-control" value="{{ question.option1 }}" style="border: 1px solid black;">
             </div>
             <div>
-                <label for="option2" class="form-label">Option2</label>
-                <input type="text" name="option2" id="option2" class="form-control" value="{{ question.option2 }}" >
+                <label for="option2" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Option2</label>
+                <input type="text" name="option2" id="option2" class="form-control" value="{{ question.option2 }}" style="border: 1px solid black;" >
             </div>
             <div>
-                <label for="option3" class="form-label">Option3</label>
-                <input type="text" name="option3" id="option3" class="form-control" value="{{ question.option3 }}" >
+                <label for="option3" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Option3</label>
+                <input type="text" name="option3" id="option3" class="form-control" value="{{ question.option3 }}" style="border: 1px solid black;">
             </div>
             <div>
-                <label for="option4" class="form-label">Option4</label>
-                <input type="text" name="option4" id="option4" class="form-control" value="{{ question.option4 }}" >
+                <label for="option4" class="form-label" style="color:rgb(0, 0, 0);text-shadow:none;">Option4</label>
+                <input type="text" name="option4" id="option4" class="form-control" value="{{ question.option4 }}"style="border: 1px solid black;"  >
             </div>
             <div>
-                <label for="correct_option" class="form-label">Correct option</label>
-                <select name="correct_option" id="correct_option" class="form-control" required>
+                <label for="correct_option" class="form-label"  style="color:rgb(0, 0, 0);text-shadow:none;">Correct option</label>
+                <select name="correct_option" id="correct_option" class="form-control" required style="border: 1px solid black;">
                     <option value="" disabled selected>Choose Option</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                 </select>
+                
+                </div>
                 <br>
+                <div class="edfoo" style="text-align: center;">
                 <div style="display: inline-block;">
                     <button type="submit" class="btn btn-success">Save</button>
                 </div>
                 <div style="display: inline-block;">
                     <a href="{{ url_for('admin') }}" class="btn btn-danger">Cancel</a>
                 </div>
+                </div>
             </div>
 
 
         </form>
     </div>
+</div>
 
 
 

@@ -1,13 +1,3 @@
-# from flask_sqlalchemy import SQLAlchemy
-# from app import db
-# from flask_migrate import Migrate
-
-# app.config['SQLALCHEMY_DATABASE_URI'] ='sqlite:///db.sqlite3'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-
-# db=SQLAlchemy(app)
-# migrate= Migrate(app, db)
 
 from extension import db
 
@@ -69,13 +59,6 @@ class Scores(db.Model):
     time_taken= db.Column(db.Time, nullable=False)
     total_scored= db.Column(db.Integer, nullable=False)
 
-
-
-
-
-# with app.app_context():
-#     db.create_all()
-#     db.session.commit()    
 
      
            

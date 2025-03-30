@@ -1,13 +1,11 @@
 from flask import render_template,request,url_for,flash,redirect,session
 from app import app
 from extension import db
-from datetime import datetime, timedelta, time
-# import datetime
+from datetime import datetime, time
 from models import db, Admin,User,Subject,Quiz,Question,Chapter,Scores
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from config import Config
-from sqlalchemy.orm import joinedload
 from sqlalchemy import func
 
 ADMIN_USERNAME = Config.ADMIN_USERNAME
@@ -36,12 +34,13 @@ def login():
       if not username or not password:
         flash("Enter username and password")
         return redirect(url_for('login'))
+      
       admin=Admin.query.filter_by(username=username).first()
 
-    #   if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
-      if username == (admin.username or ADMIN_USERNAME) and password == (admin.password or ADMIN_PASSWORD):
-         flash("Admin logged in successfully")
-         return redirect(url_for('admin'))
+      if admin and admin.password == password:
+          flash("Admin logged in successfully")
+          session['user_id'] = admin.id
+          return redirect(url_for('admin'))
 
       user=User.query.filter_by(username=username).first()  
 
@@ -281,10 +280,7 @@ def quizz():
         quizzes = Quiz.query.filter(Quiz.chapter_id.in_(chapter_ids)).all()
     else:    
         quizzes=Quiz.query.all()
-    # quizz_in_chapter = {}
-    # for chapter in  chapters:
-    #     quizz_in_chapter[chapter.id] = Quiz.query.filter_by(chapter_id = chapter.id).all()
-    #     return render_template("quiz_management.html", chapters = chapters, quizz_in_chapter = quizz_in_chapter)
+    
     return render_template('quiz_management.html', quizzes=quizzes, chapters=chapters, query=query)
     
 #------------------------------------------------------------new quiz ------------------------------------------------------------------
@@ -379,7 +375,7 @@ def quiz_details(quiz_id):
         }
         return render_template('quiz_details.html', quiz_details=quiz_details)
     else:
-        # flash ("Quiz not found", 404)
+        flash ("Quiz not found", 404)
         return redirect(url_for('quizz'))
 
 
@@ -390,10 +386,6 @@ def add_questions(quiz_id):
         if not quiz:
             return "Quiz not found", 404
         
-        # session['question_count'] == Question.query.filter_by(quiz_id = quiz_id).count()
-        # if 'question_count' not in session or session['question_count'] >= quiz.no_of_questions:
-        #     session['question_count'] = 0
-            # session[ 'question_count' ] = Question.query.filter_by(quiz_id = quiz_id).count()
 
         if request.method == 'POST':
             question_text= request.form.get('question_text')
@@ -416,15 +408,8 @@ def add_questions(quiz_id):
             db.session.commit()
             quiz.no_of_questions +=1
             db.session.commit()
-            # session[ 'question_count' ] += 1
-            # if session[ 'question_count' ] < quiz.no_of_questions:
-            #     # session.pop('question_count', None)
-            #     print('redirect to next page')
-            #     return redirect(url_for('add_questions', quiz_id=quiz_id))
-            # else:
-            #     session.pop('question_count', None)
-            #     return redirect(url_for('quizz'))       
-        return render_template('add_question.html',quiz=quiz) # question_count=session[ 'question_count' ]+1
+              
+        return render_template('add_question.html',quiz=quiz) 
 # --------------------------------------------------------------------------delete question--------------------------------------------------------------------------------
 @app.route('/question/delete/<int:question_id>',methods=['GET','POST'])
 def del_question(question_id):
@@ -491,10 +476,7 @@ def user_dashboard():
         quiz_data.append((quiz,chapter, question_count))
     return render_template('user_dashboard.html', quizzes=quiz_data,query = query, search_type= search_type)
         
-# @app.route('/quiz/display', methods=['GET','POST'])
-# def quiz_display():
-#     quizzes=Quiz.query.all()
-#     return render_template('user_dashboard.html',quizzes=quizzes)
+
 
 # -------------------------------------------------------dispaly and attempt quiz --------------------------------------------------------------------------------------
 @app.route('/user/quiz_attempt/<int:quiz_id>/<int:question_num>', methods=['GET','POST'])

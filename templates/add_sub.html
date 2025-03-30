@@ -12,15 +12,20 @@
 
 </head>
 <body>
+    <div class="add-main">
     {% include 'flashed_message.html' %}
-    <h1>Add Subject</h1>
-    <form method="POST" action="{{url_for('add_sub')}}" class="logform">
-        <label for="subject_name" class="form-label" >Subject Name</label>
-        <input type="text" name="subject_name" placeholder="Subject Name" class="form-control" required>
+    <div class="profile-form">
         <br>
-        <label for="subject_description" class="form-label">Subject Description</label>
+    
+    <form method="POST" action="{{url_for('add_sub')}}" class="logform" id="user-form">
+        <div class="add-inner" style="margin-top:4rem;">
+        <h1>Add Subject</h1>
+        <label for="subject_name" class="form-label" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger;text-shadow:none;">Subject Name</label>
+        <input type="text" name="subject_name" placeholder="Subject Name" class="form-control" required style="border: 1px solid black;">
+        <br>
+        <label for="subject_description" class="form-label" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; color:black;font-size:larger;text-shadow:none;">Subject Description</label>
         <div>
-        <textarea name="subject_description" placeholder="Subject_desscription">
+        <textarea name="subject_description" placeholder="Subject_description">
         </textarea>
         </div>
         <div style="display: inline-block;">
@@ -29,8 +34,10 @@
         <div style="display: inline-block;">
             <a href="{{ url_for('admin') }}" class="btn btn-danger">cancel</a>
         </div>
-
+    </div>
     </form>
+</div>
+   </div>
 
 
 

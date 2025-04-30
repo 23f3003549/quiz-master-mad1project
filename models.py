@@ -13,20 +13,20 @@ class User(db.Model):
     fullName=db.Column(db.String(70), nullable=False)
     qualification=db.Column(db.String(50))
     dob=db.Column(db.Date, nullable=True)
-    score=db.relationship('Scores', backref='user', lazy=True)
+    score=db.relationship('Scores', backref='user',cascade="all, delete-orphan", lazy=True)
 
 class Subject(db.Model):
     id =db.Column(db.Integer, primary_key=True, autoincrement=True)
     name= db.Column(db.String(50), nullable=False)
     description=db.Column(db.String(200), nullable=True)
-    chapters=db.relationship('Chapter', backref='subject', lazy=True)
+    chapters=db.relationship('Chapter', backref='subject',cascade="all, delete-orphan", lazy=True)
 
 class Chapter(db.Model):
     id =db.Column(db.Integer, primary_key=True, autoincrement=True)
     subject_id=db.Column(db.Integer, db.ForeignKey('subject.id', name='FK_chapter_subject_id'), nullable=False)
     name=db.Column(db.String(50), nullable=False)
     description=db.Column(db.String(100), nullable=True)
-    quizs=db.relationship('Quiz', backref='chapter', lazy=True)
+    quizs=db.relationship('Quiz', backref='chapter',cascade="all, delete-orphan", lazy=True)
     
 
 class Quiz(db.Model):
@@ -36,8 +36,8 @@ class Quiz(db.Model):
     time_duration= db.Column(db.Integer, nullable=False)
     no_of_questions=db.Column(db.Integer, nullable=True)
     notes=db.Column(db.String(50), nullable=True)
-    questions=db.relationship('Question', backref='quiz', lazy=True)
-    score=db.relationship('Scores', backref='quiz', lazy=True)
+    questions=db.relationship('Question', backref='quiz',cascade="all, delete-orphan", lazy=True)
+    score=db.relationship('Scores', backref='quiz',cascade="all, delete-orphan", lazy=True)
     
 
 class Question(db.Model):

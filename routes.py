@@ -583,6 +583,8 @@ def user_scores ():
     quiz_scores=[]
     for score in scores:
         quiz = Quiz.query.get(score.quiz_id)
+        if not quiz:
+            continue
         chapter = Chapter.query.get(quiz.chapter_id)
         chapter_name = chapter.name if chapter else "unknown chapter"
         no_of_questions = Question.query.filter_by(quiz_id=quiz.id).count()
